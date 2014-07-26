@@ -1,0 +1,169 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Application.h" />
+    <ClInclude Include="AssetManager.h" />
+    <ClInclude Include="Color.h" />
+    <ClInclude Include="Component.h" />
+    <ClInclude Include="ComponentHelpers.h" />
+    <ClInclude Include="CoreUI.h" />
+    <ClInclude Include="Dialog.h" />
+    <ClInclude Include="GameHelpers.h" />
+    <ClInclude Include="InputDefinitions.h" />
+    <ClInclude Include="KeyHandler.h" />
+    <ClInclude Include="MatrixManager.h" />
+    <ClInclude Include="MouseEvent.h" />
+    <ClInclude Include="MouseHandler.h" />
+    <ClInclude Include="ObjectHash.h" />
+    <ClInclude Include="PagedAllocator.h" />
+    <ClInclude Include="PartitionManager.h" />
+    <ClInclude Include="RenderManager.h" />
+    <ClInclude Include="DrawBuffer.h" />
+    <ClInclude Include="DrawObjects.h" />
+    <ClInclude Include="Entity.h" />
+    <ClInclude Include="GameMath.h" />
+    <ClInclude Include="GLWindow.h" />
+    <ClInclude Include="GnUtilities.h" />
+    <ClInclude Include="CoreComponents.h" />
+    <ClInclude Include="IndexList.h" />
+    <ClInclude Include="IntrusiveLinkedList.h" />
+    <ClInclude Include="IOCContainer.h" />
+    <ClInclude Include="Matrix.h" />
+    <ClInclude Include="Rect.h" />
+    <ClInclude Include="Renderer.h" />
+    <ClInclude Include="RenderThread.h" />
+    <ClInclude Include="SeanSort.h" />
+    <ClInclude Include="ShaderManager.h" />
+    <ClInclude Include="Skeletal.h" />
+    <ClInclude Include="StringTable.h" />
+    <ClInclude Include="Text.h" />
+    <ClInclude Include="Texture.h" />
+    <ClInclude Include="TextureManager.h" />
+    <ClInclude Include="Tool.h" />
+    <ClInclude Include="TypeInfo.h" />
+    <ClInclude Include="UIDecorator.h" />
+    <ClInclude Include="UIElement.h" />
+    <ClInclude Include="UIOptions.h" />
+    <ClInclude Include="UISubsystem.h" />
+    <ClInclude Include="Vector.h" />
+    <ClInclude Include="VertexList.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="Application.cpp" />
+    <ClCompile Include="AssetManager.cpp" />
+    <ClCompile Include="BackgroundedElement.cpp" />
+    <ClCompile Include="BorderedElement.cpp" />
+    <ClCompile Include="Component.cpp" />
+    <ClCompile Include="ComponentHelpers.cpp" />
+    <ClCompile Include="CoreComponents.cpp" />
+    <ClCompile Include="CoreLayouts.cpp" />
+    <ClCompile Include="CoreUI.cpp" />
+    <ClCompile Include="Dialog.cpp" />
+    <ClCompile Include="DraggableElement.cpp" />
+    <ClCompile Include="DrawObjects.cpp" />
+    <ClCompile Include="Entity.cpp" />
+    <ClCompile Include="GameHelpers.cpp" />
+    <ClCompile Include="GameMath.cpp" />
+    <ClCompile Include="GLWindow.cpp" />
+    <ClCompile Include="IndexList.cpp" />
+    <ClCompile Include="InputDefinitions.cpp" />
+    <ClCompile Include="KeyHandler.cpp" />
+    <ClCompile Include="Matrix.cpp" />
+    <ClCompile Include="MatrixManager.cpp" />
+    <ClCompile Include="MouseHandler.cpp" />
+    <ClCompile Include="PagedAllocator.cpp" />
+    <ClCompile Include="PartitionManager.cpp" />
+    <ClCompile Include="Renderer.cpp" />
+    <ClCompile Include="RenderManager.cpp" />
+    <ClCompile Include="RenderThread.cpp" />
+    <ClCompile Include="ResizeableElement.cpp" />
+    <ClCompile Include="ShaderManager.cpp" />
+    <ClCompile Include="Skeletal.cpp" />
+    <ClCompile Include="Text.cpp" />
+    <ClCompile Include="Texture.cpp" />
+    <ClCompile Include="TextureManager.cpp" />
+    <ClCompile Include="Tool.cpp" />
+    <ClCompile Include="UIElement.cpp" />
+    <ClCompile Include="UISubsystem.cpp" />
+    <ClCompile Include="VertexList.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\arq\assets\shaders\color.frag" />
+    <None Include="..\arq\assets\shaders\color.vert" />
+    <None Include="..\arq\assets\shaders\texture.frag" />
+    <None Include="..\arq\assets\shaders\texture.vert" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\libpng\libpng.vcxproj">
+      <Project>{3c2c530b-1813-4914-b9a7-47e94c44f737}</Project>
+    </ProjectReference>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{2D7D5123-DF58-43CB-8D32-9547347ACF20}</ProjectGuid>
+    <RootNamespace>engine</RootNamespace>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v110</PlatformToolset>
+    <CharacterSet>MultiByte</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v110</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>MultiByte</CharacterSet>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" />
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
+      <AdditionalIncludeDirectories>..\;..\include;C:\boost_1_55_0b1;</AdditionalIncludeDirectories>
+    </ClCompile>
+    <Link>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>MaxSpeed</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <AdditionalIncludeDirectories>..\;..\include;C:\boost_1_55_0b1;</AdditionalIncludeDirectories>
+      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
+    </ClCompile>
+    <Link>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+    </Link>
+  </ItemDefinitionGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>

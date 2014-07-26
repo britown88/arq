@@ -1,0 +1,32 @@
+fonts
+fonts pressstart.ttf
+img
+img 00.png
+img sand.png
+img splash.png
+img wow.png
+img body
+img body arm.png
+img body leg.png
+img body head
+img body head back
+img body head back 00.png
+img body head front
+img body head front 00.png
+img body head front 01.png
+img body head side
+img body head side 00.png
+img body head side 01.png
+img body torso
+img body torso torso.png
+img body torso back
+img body torso back 00.png
+img body torso front
+img body torso front 00.png
+img body torso side
+img body torso side 00.png
+shaders
+shaders color.frag
+shaders color.vert
+shaders texture.frag
+shaders texture.vert
