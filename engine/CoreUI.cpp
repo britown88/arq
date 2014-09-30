@@ -21,7 +21,7 @@ public:
       auto winSize = app->windowSize();
 
       m_bounds.absolute = m_bounds.relative = 
-         m_bounds.outerClipped = m_bounds.innerClipped = Rectf(0, 0, winSize.x, winSize.y);
+         m_bounds.outerClipped = m_bounds.innerClipped = Rectf(0.0f, 0.0f, (float)winSize.x, (float)winSize.y);
    }
 
    void draw(Renderer &r)
@@ -55,7 +55,7 @@ class WorldUIElementImpl : public CoreUI::WorldUIElement
 
    bool m_dragging;
    Float2 m_clickPoint;
-   Rectf startingBounds;
+   Rectf startingBounds, m_viewport;
    UIElementBounds m_bounds;
 public:
    WorldUIElementImpl(const Rectf &viewport, RenderManager *rm)
@@ -66,10 +66,10 @@ public:
       m_bounds.absolute = viewport;
       m_renderManager = rm;
 
-      registerMouseScroll(0, [&](MouseEvent e){onScroll(e.scrollX, e.scrollY);});
-      registerMouseButton(Input::MouseLeft, Input::Press, 0, [&](MouseEvent e){onMouseDown(e.x, e.y);});
-      registerMouseButton(Input::MouseLeft, Input::Release, 0, [&](MouseEvent e){onMouseUp(e.x, e.y);});
-      registerMouseMove([&](MouseEvent e){onMouseMove(e.x, e.y);});
+      registerMouseScroll(0, [&](MouseEvent e){onScroll((float)e.scrollX, (float)e.scrollY);});
+      registerMouseButton(Input::MouseLeft, Input::Press, 0, [&](MouseEvent e){onMouseDown((float)e.x, (float)e.y);});
+      registerMouseButton(Input::MouseLeft, Input::Release, 0, [&](MouseEvent e){onMouseUp((float)e.x, (float)e.y);});
+      registerMouseMove([&](MouseEvent e){onMouseMove((float)e.x, (float)e.y);});
 
       m_dragging = false;
    }
@@ -116,7 +116,7 @@ public:
       }
    }
 
-   Rectf buildProportionalViewport()
+   void buildProportionalViewport()
    {
       Rectf rel = m_bounds.relative;
       float rw = rel.width();
@@ -129,18 +129,39 @@ public:
       vp.offset(Float2((rw - vp.width()) / 2.0f, (rh - vp.height()) / 2.0f));
       vp.offset(Float2(rel.left, rel.top));
 
-      return vp;
+      m_viewport = vp;
+   }
+
+   Float2 vp2world(Float2 pos)
+   {
+      pos.x -= m_bounds.relative.left;
+      pos.y -= m_bounds.relative.top;
+
+      pos.x -= (m_bounds.relative.width() - m_viewport.width()) / 2.0f;
+      pos.y -= (m_bounds.relative.height() - m_viewport.height()) / 2.0f;
+
+      pos.x /= m_viewport.width();
+      pos.y /= m_viewport.height();
+
+      pos.x *= m_cameraBounds.width();
+      pos.y *= m_cameraBounds.height();
+
+      pos.x += m_cameraBounds.left;
+      pos.y += m_cameraBounds.top;
+
+      return pos;
    }
 
    void draw(Renderer &r)
    {
-      r.pushViewport(buildProportionalViewport());
+      buildProportionalViewport();
+      r.pushViewport(m_viewport);
       //r.pushViewport(m_bounds.relative);
       r.pushCamera(m_cameraBounds);
 
       r.pushScissor(m_bounds.outerClipped);
 
-      m_renderManager->draw(r);
+      m_renderManager->draw(r, m_cameraBounds);
 
       r.popCamera();
 
@@ -164,17 +185,19 @@ std::unique_ptr<CoreUI::WorldUIElement> CoreUI::buildWorldUIElement(const Rectf 
    return std::unique_ptr<WorldUIElement>(new WorldUIElementImpl(viewport, rm));
 }
 
-class TextElement : public UIElement
+class TextElementImpl : public CoreUI::TextElement
 {
    UIElementBounds m_bounds;
    TextString m_string;
+   Colorf m_color;
 
 public:
-   TextElement(std::string text, std::shared_ptr<TextFont> font, Float2 position)
+   TextElementImpl(std::string text, std::shared_ptr<TextFont> font, Float2 position)
    {
       m_string.text = text;
       m_string.font = font;
       m_bounds.absolute.offset(position);
+      m_color = Colorf(1, 1, 1);
    }
 
    void draw(Renderer &r)
@@ -182,8 +205,12 @@ public:
       Matrix m = IdentityMatrix();
       MatrixTransforms::translate(m, m_bounds.outerClipped.left, m_bounds.outerClipped.top);
 
-      r.drawText(m_string, m, Colorf(1, 1, 1));
+      r.drawText(m_string, m, m_color);
    }
+
+   void setText(std::string text){m_string.text = text;}
+   void setFont(std::shared_ptr<TextFont> font){m_string.font = font;}
+   void setColor(Colorf c){m_color = c;}
 
    UILayout *getLayout(){return nullptr;}
    UIElementBounds &getBounds(){return m_bounds;}
@@ -191,9 +218,9 @@ public:
 
 
 
-std::unique_ptr<UIElement> CoreUI::buildTextElement(std::string text, std::shared_ptr<TextFont> font, Float2 position)
+std::unique_ptr<CoreUI::TextElement> CoreUI::buildTextElement(std::string text, std::shared_ptr<TextFont> font, Float2 position)
 {
-   return std::unique_ptr<TextElement>(new TextElement(text, font, position));
+   return std::unique_ptr<TextElementImpl>(new TextElementImpl(text, font, position));
 }
 
 class BasicElement : public UIElement

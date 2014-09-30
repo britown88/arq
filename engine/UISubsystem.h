@@ -160,6 +160,14 @@ public:
    virtual void giveMouseFocus(MouseHandler *handler){m_inner->giveMouseFocus(handler);}
    virtual void removeMouseFocus(){m_inner->removeMouseFocus();}
 
+   virtual void registerKeyCallback(KeyEvent e, UIKeyCallback cb){m_inner->registerKeyCallback(e, cb);}
+   virtual void unRegisterKeyCallback(KeyEvent e){m_inner->unRegisterKeyCallback(e);}
+   virtual bool onKeyEvent(KeyEvent e){return m_inner->onKeyEvent(e);}
+
+   virtual void registerControllerCallback(ControllerEvent e, UIControllerCallback cb){m_inner->registerControllerCallback(e, cb);}
+   virtual void unRegisterControllerCallback(ControllerEvent e){m_inner->unRegisterControllerCallback(e);}
+   virtual bool onControllerEvent(ControllerEvent e){return m_inner->onControllerEvent(e);}
+
    //UI Helpers
    virtual void registerMouseButton(int button, int action, int mods, UIMouseCallback cb){m_inner->registerMouseButton(button, action, mods, cb);}
    virtual void registerMouseMove(UIMouseCallback cb){m_inner->registerMouseMove(cb);}
@@ -169,6 +177,16 @@ public:
    virtual void unregisterMouseMove(){m_inner->unregisterMouseMove();}
    virtual void unregisterMouseScroll(int mods){m_inner->unregisterMouseScroll(mods);}
    virtual void unregisterMouseEnter(bool entered){m_inner->unregisterMouseEnter(entered);}
+
+   virtual void registerKeyboardKey(int key, int action, int mods, UIKeyCallback cb){m_inner->registerKeyboardKey(key, action, mods, cb);}
+   virtual void unregisterKeyboardKey(int key, int action, int mods){m_inner->unregisterKeyboardKey(key, action, mods);}
+
+   virtual void registerControllerPresence(bool attached, UIControllerCallback cb){m_inner->registerControllerPresence(attached, cb);}
+   virtual void registerControllerButton(int id, int button, int action, UIControllerCallback cb){m_inner->registerControllerButton(id, button, action, cb);}
+   virtual void registerControllerAxis(int id, int axis, int action, UIControllerCallback cb){m_inner->registerControllerAxis(id, axis, action, cb);}
+   virtual void unregisterControllerPresence(bool attached){m_inner->unregisterControllerPresence(attached);}
+   virtual void unregisterControllerButton(int id, int button, int action){m_inner->unregisterControllerButton(id, button, action);}
+   virtual void unregisterControllerAxis(int id, int axis, int action){m_inner->unregisterControllerAxis(id, axis, action);}
 
    //helpers
    virtual void setOptionAllBorders(float width){m_inner->setOptionAllBorders(width);}
@@ -220,6 +238,14 @@ public:
    virtual void giveMouseFocus(MouseHandler *handler){m_innerSystem->giveMouseFocus(handler);}
    virtual void removeMouseFocus(){m_innerSystem->removeMouseFocus();}
 
+   virtual void registerKeyCallback(KeyEvent e, UIKeyCallback cb){m_innerSystem->registerKeyCallback(e, cb);}
+   virtual void unRegisterKeyCallback(KeyEvent e){m_innerSystem->unRegisterKeyCallback(e);}
+   virtual bool onKeyEvent(KeyEvent e){return m_innerSystem->onKeyEvent(e);}
+
+   virtual void registerControllerCallback(ControllerEvent e, UIControllerCallback cb){m_innerSystem->registerControllerCallback(e, cb);}
+   virtual void unRegisterControllerCallback(ControllerEvent e){m_innerSystem->unRegisterControllerCallback(e);}
+   virtual bool onControllerEvent(ControllerEvent e){return m_innerSystem->onControllerEvent(e);}
+
    //UI Helpers
    virtual void registerMouseButton(int button, int action, int mods, UIMouseCallback cb){m_innerSystem->registerMouseButton(button, action, mods, cb);}
    virtual void registerMouseMove(UIMouseCallback cb){m_innerSystem->registerMouseMove(cb);}
@@ -229,6 +255,16 @@ public:
    virtual void unregisterMouseMove(){m_innerSystem->unregisterMouseMove();}
    virtual void unregisterMouseScroll(int mods){m_innerSystem->unregisterMouseScroll(mods);}
    virtual void unregisterMouseEnter(bool entered){m_innerSystem->unregisterMouseEnter(entered);}
+
+   virtual void registerKeyboardKey(int key, int action, int mods, UIKeyCallback cb){m_innerSystem->registerKeyboardKey(key, action, mods, cb);}
+   virtual void unregisterKeyboardKey(int key, int action, int mods){m_innerSystem->unregisterKeyboardKey(key, action, mods);}
+
+   virtual void registerControllerPresence(bool attached, UIControllerCallback cb){m_innerSystem->registerControllerPresence(attached, cb);}
+   virtual void registerControllerButton(int id, int button, int action, UIControllerCallback cb){m_innerSystem->registerControllerButton(id, button, action, cb);}
+   virtual void registerControllerAxis(int id, int axis, int action, UIControllerCallback cb){m_innerSystem->registerControllerAxis(id, axis, action, cb);}
+   virtual void unregisterControllerPresence(bool attached){m_innerSystem->unregisterControllerPresence(attached);}
+   virtual void unregisterControllerButton(int id, int button, int action){m_innerSystem->unregisterControllerButton(id, button, action);}
+   virtual void unregisterControllerAxis(int id, int axis, int action){m_innerSystem->unregisterControllerAxis(id, axis, action);}
 
    //helpers
    virtual void setOptionAllBorders(float width){m_innerSystem->setOptionAllBorders(width);}

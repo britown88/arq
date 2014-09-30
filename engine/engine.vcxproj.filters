@@ -180,9 +180,6 @@
     <ClInclude Include="Tool.h">
       <Filter>Header Files\Application</Filter>
     </ClInclude>
-    <ClInclude Include="PartitionManager.h">
-      <Filter>Header Files\Game\Managers</Filter>
-    </ClInclude>
     <ClInclude Include="KeyHandler.h">
       <Filter>Header Files\Application</Filter>
     </ClInclude>
@@ -192,10 +189,40 @@
     <ClInclude Include="TypeInfo.h">
       <Filter>Header Files\Utility</Filter>
     </ClInclude>
-    <ClInclude Include="Skeletal.h">
+    <ClInclude Include="SeanSort.h">
+      <Filter>Header Files\Utility</Filter>
+    </ClInclude>
+    <ClInclude Include="KeyEvent.h">
+      <Filter>Header Files\Application</Filter>
+    </ClInclude>
+    <ClInclude Include="ControllerEvent.h">
+      <Filter>Header Files\Application</Filter>
+    </ClInclude>
+    <ClInclude Include="ControllerHandler.h">
+      <Filter>Header Files\Application</Filter>
+    </ClInclude>
+    <ClInclude Include="InputDefinitions360.h">
+      <Filter>Header Files\Application</Filter>
+    </ClInclude>
+    <ClInclude Include="StateMachine.h">
       <Filter>Header Files\Game</Filter>
     </ClInclude>
-    <ClInclude Include="SeanSort.h">
+    <ClInclude Include="PropertyMap.h">
+      <Filter>Header Files\Utility</Filter>
+    </ClInclude>
+    <ClInclude Include="JSON.h">
+      <Filter>Header Files\Utility</Filter>
+    </ClInclude>
+    <ClInclude Include="DataManager.h">
+      <Filter>Header Files\Utility</Filter>
+    </ClInclude>
+    <ClInclude Include="SpriteManager.h">
+      <Filter>Header Files\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="Animation.h">
+      <Filter>Header Files\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="Logs.h">
       <Filter>Header Files\Utility</Filter>
     </ClInclude>
   </ItemGroup>
@@ -235,9 +262,6 @@
     </ClCompile>
     <ClCompile Include="CoreComponents.cpp">
       <Filter>Source Files\Game</Filter>
-    </ClCompile>
-    <ClCompile Include="RenderManager.cpp">
-      <Filter>Source Files\Game\Managers</Filter>
     </ClCompile>
     <ClCompile Include="ComponentHelpers.cpp">
       <Filter>Source Files\Game</Filter>
@@ -299,17 +323,26 @@
     <ClCompile Include="Tool.cpp">
       <Filter>Source Files\Application</Filter>
     </ClCompile>
-    <ClCompile Include="PartitionManager.cpp">
-      <Filter>Source Files\Game\Managers</Filter>
-    </ClCompile>
     <ClCompile Include="KeyHandler.cpp">
       <Filter>Source Files\Application</Filter>
     </ClCompile>
     <ClCompile Include="MatrixManager.cpp">
       <Filter>Source Files\Game\Managers</Filter>
     </ClCompile>
-    <ClCompile Include="Skeletal.cpp">
-      <Filter>Source Files\Game</Filter>
+    <ClCompile Include="ControllerHandler.cpp">
+      <Filter>Source Files\Application</Filter>
+    </ClCompile>
+    <ClCompile Include="InputDefinitions360.cpp">
+      <Filter>Source Files\Application</Filter>
+    </ClCompile>
+    <ClCompile Include="DataManager.cpp">
+      <Filter>Source Files\Utility</Filter>
+    </ClCompile>
+    <ClCompile Include="SpriteManager.cpp">
+      <Filter>Source Files\Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="Logs.cpp">
+      <Filter>Source Files\Utility</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

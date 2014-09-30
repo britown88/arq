@@ -26,10 +26,10 @@ public:
 
    bool contains(const Rect2<T> &rect) const
    {
-      if (left > rect.right ||
-         top > rect.bottom ||
-         rect.left > right ||
-         rect.top > bottom) return false;
+      if (left >= rect.right ||
+         top >= rect.bottom ||
+         rect.left >= right ||
+         rect.top >= bottom) return false;
       return true;
    }
 

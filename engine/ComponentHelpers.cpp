@@ -1,55 +1,29 @@
 #include "ComponentHelpers.h"
 
 #include "CoreComponents.h"
-#include "Skeletal.h"
 
-Entity *ComponentHelpers::getBaseParent(Entity *e)
-{
-   if(auto skel = e->get<SkeletalLimbComponent>())
-   {
-      if(skel->skeletalParent)
-         return getBaseParent(skel->skeletalParent);
-   }
-
-   return e;
-}
-
-float ComponentHelpers::getSkeletalZ(Entity *e)
-{
-   if(auto skel = e->get<SkeletalLimbComponent>())
-   {
-      if(skel->skeletalParent)
-         return skel->z + getSkeletalZ(skel->skeletalParent);
-
-      return skel->z;
-   }
-
-   return 0.0f;
-}
-
-float ComponentHelpers::getBottomY(Entity *e)
-{
-   float bottomY = 0;
-   auto pos = e->get<PositionComponent>();
-   auto gbc = e->get<GraphicalBoundsComponent>();
-
-   if(pos)
-      bottomY += pos->pos.y;
-   if(gbc)
-   {
-      bottomY += gbc->size.y;
-      bottomY -= gbc->center.y;
-   }
-
-   return bottomY;
-
-}
 int ComponentHelpers::getLayer(Entity *e)
 {
    if(auto l = e->get<LayerComponent>())
       return l->layer;
 
    return 0;
+}
+
+Rectf ComponentHelpers::getCollisionBox(Entity *e)
+{
+   Rectf aabb;
+
+   if(auto cbc = e->get<CollisionBoxComponent>())
+      aabb = cbc->aabb;
+
+   if(auto pc = e->get<PositionComponent>())
+      aabb.offset(pc->pos);
+
+   if(auto cc = e->get<CenterComponent>())
+      aabb.offset(Float2(-cc->center.x, -cc->center.y));
+
+   return aabb;
 }
 
 void ComponentHelpers::buildEntityTextureTransform(Entity *e, Matrix &texMatrix)
@@ -98,6 +72,7 @@ Rectf ComponentHelpers::getEntityRect(Entity *e)
 {
    auto pc = e->get<PositionComponent>();
    auto gbc = e->get<GraphicalBoundsComponent>();
+   auto cc = e->get<CenterComponent>();
 
    Float2 pos;
    Float2 size(1, 1);
@@ -112,9 +87,12 @@ Rectf ComponentHelpers::getEntityRect(Entity *e)
    {
       size.x = gbc->size.x;
       size.y = gbc->size.y;
+   }
 
-      pos.x -= gbc->center.x;
-	   pos.y -= gbc->center.y;
+   if(cc)
+   {
+      pos.x -= cc->center.x;
+	   pos.y -= cc->center.y;
    }
 
    return Rectf(pos.x, pos.y, pos.x + size.x, pos.y + size.y);

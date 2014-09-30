@@ -12,7 +12,8 @@
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{0B95AB55-1048-447C-92FC-12263985E2AD}</ProjectGuid>
-    <RootNamespace>arqgame</RootNamespace>
+    <RootNamespace>wiz-game</RootNamespace>
+    <ProjectName>arq-game</ProjectName>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
@@ -45,6 +46,7 @@
       <Optimization>Disabled</Optimization>
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
       <AdditionalIncludeDirectories>..\;..\include;C:\boost_1_55_0b1;</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;_MBCS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -71,11 +73,29 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="CharacterManager.h" />
+    <ClInclude Include="GameData.h" />
+    <ClInclude Include="GridEditor.h" />
+    <ClInclude Include="GridManager.h" />
+    <ClInclude Include="InputManager.h" />
+    <ClInclude Include="PartitionManager.h" />
+    <ClInclude Include="PhysicsManager.h" />
+    <ClInclude Include="CollisionManager.h" />
+    <ClInclude Include="RenderManager.h" />
+    <ClInclude Include="ArqComponents.h" />
     <ClInclude Include="ArqGame.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="CharacterManager.cpp" />
+    <ClCompile Include="GameData.cpp" />
+    <ClCompile Include="GridEditor.cpp" />
+    <ClCompile Include="GridManager.cpp" />
+    <ClCompile Include="InputManager.cpp" />
+    <ClCompile Include="PartitionManager.cpp" />
+    <ClCompile Include="PhysicsManager.cpp" />
+    <ClCompile Include="CollisionManager.cpp" />
+    <ClCompile Include="RenderManager.cpp" />
     <ClCompile Include="ArqGame.cpp" />
-    <ClCompile Include="CharacterEntities.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

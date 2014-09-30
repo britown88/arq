@@ -27,6 +27,7 @@ public:
    void open(UIElement *parent);
    void close();
    void setMaximized(bool set);
+  
    UIElement *getDlgElement();
 
 };

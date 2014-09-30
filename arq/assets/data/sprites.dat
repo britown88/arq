@@ -1,0 +1,95 @@
+{
+	"type": "sprite",
+	"name": "chenrun",
+
+	"folder": "assets/img/Chengaem/CHEN/runny",
+	"fps": 10.0
+}
+
+{
+	"type": "sprite",
+	"name": "chenidle",
+
+	"folder": "assets/img/Chengaem/CHEN/idle",
+	"fps": 10.0
+}
+
+{
+	"type": "sprite",
+	"name": "chenjumpup",
+
+	"folder": "assets/img/Chengaem/CHEN/jumpy/up",
+	"fps": 10.0
+}
+
+{
+	"type": "sprite",
+	"name": "chenjumpdown",
+
+	"folder": "assets/img/Chengaem/CHEN/jumpy/down",
+	"fps": 10.0
+}
+
+{
+	"type": "sprite",
+	"name": "tewirun",
+
+	"folder": "assets/img/Chengaem/TEWI/runny",
+	"fps": 10.0
+}
+
+{
+	"type": "sprite",
+	"name": "tewiidle",
+
+	"folder": "assets/img/Chengaem/TEWI/idle",
+	"fps": 10.0
+}
+
+{
+	"type": "sprite",
+	"name": "tewijumpup",
+
+	"folder": "assets/img/Chengaem/TEWI/jumpy/up",
+	"fps": 10.0
+}
+
+{
+	"type": "sprite",
+	"name": "tewijumpdown",
+
+	"folder": "assets/img/Chengaem/TEWI/jumpy/down",
+	"fps": 10.0
+}
+
+{
+	"type": "sprite",
+	"name": "slrun",
+
+	"folder": "assets/img/wizards/sirlayersworth/runny",
+	"fps": 5.0
+}
+
+{
+	"type": "sprite",
+	"name": "slidle",
+
+	"folder": "assets/img/wizards/sirlayersworth/idle",
+	"fps": 10.0
+}
+
+{
+	"type": "sprite",
+	"name": "sljumpup",
+
+	"folder": "assets/img/wizards/sirlayersworth/jumpy/up",
+	"fps": 10.0
+}
+
+{
+	"type": "sprite",
+	"name": "sljumpdown",
+
+	"folder": "assets/img/wizards/sirlayersworth/jumpy/down",
+	"fps": 10.0
+}

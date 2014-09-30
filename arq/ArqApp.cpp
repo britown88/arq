@@ -1,3 +1,4 @@
+#include <GLFW\glfw3.h>
 #include "ArqApp.h"
 
 #include "engine\CoreUI.h"
@@ -5,11 +6,15 @@
 #include "engine\IOCContainer.h"
 #include "engine\StringTable.h"
 #include "arq-game\ArqGame.h"
+#include "logbadger\LogBadger.h"
+#include "engine\InputDefinitions.h"
 
 class ArqApp : public Application
 {
-   std::unique_ptr<Tool> m_arqGame;
+   std::unique_ptr<Tool> m_arqGame, m_logBadger;
 public:
+   ~ArqApp(){}
+
    Int2 getDefaultWindowSize()
    {
       return Int2(1600, 900);
@@ -18,7 +23,7 @@ public:
 
    std::string getWindowTitle()
    {
-      return "Arq: Legend of Neat UI Systems";
+      return "Legend of Shitty Game Clones: Arqarino of Timerino";
    }
 
    //GLFWmonitor *getWindowMonitor()
@@ -37,6 +42,7 @@ public:
       splash->setOption(UIOption::BackgroundImage, st->get("assets/img/splash.png"));
 
       getUIRoot().pushListChild(splash);
+
    }
    
    void onAppStart()
@@ -46,8 +52,16 @@ public:
       m_arqGame = createArqGame();
       m_arqGame->open(&getUIRoot());
       m_arqGame->setMaximized(true);
+      giveFocus(m_arqGame->getDlgElement());
 
-      getUIRoot().arrange();    
+      m_logBadger = createLogBadger();
+      m_logBadger->open(&getUIRoot());
+
+      getUIRoot().arrange(); 
+      getUIRoot().registerKeyboardKey(Input::KeyEscape, Input::Release, 0, [&](KeyEvent e){shutdown();});
+
+
+      
    }
 };
 

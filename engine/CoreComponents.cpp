@@ -1,5 +1,4 @@
 #include "CoreComponents.h"
-#include "Skeletal.h"
 
 #include "GLFW\glfw3.h"
 
@@ -16,13 +15,14 @@ void registerCoreComponents()
    if(!initialized)
    {
       registerComponent<PositionComponent>();
+      registerComponent<CollisionBoxComponent>();
       registerComponent<MeshComponent>();
       registerComponent<GraphicalBoundsComponent>();
+      registerComponent<SpriteComponent>();
+      registerComponent<CenterComponent>();
       registerComponent<RotationComponent>();
       registerComponent<TextureComponent>();
       registerComponent<LayerComponent>();
-
-      registerComponent<SkeletalLimbComponent>();
 
       initialized = true;
    }

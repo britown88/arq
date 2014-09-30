@@ -121,7 +121,17 @@ void registerComponent(std::integral_constant<bool, true>)
 
       void deleteAt(void *list, size_t index)
       {
-         throw std::exception("Trying to delete non-complex from a complex vtable!");
+         //throw std::exception("Trying to delete non-complex from a complex vtable!");
+         auto &vec = *(ComplexComponentList<T>*)list;
+         auto &node = vec.lists[index];
+
+         auto iter = node.next;
+         while(iter.key != missingComponent)
+         {
+            auto sub = iter.key;
+            iter = deref(vec, iter).next;
+            deleteAtComplex(list, index, sub);
+         }
       }
 
       T& deref(ComplexComponentList<T>& vec, ComponentLink const& link)

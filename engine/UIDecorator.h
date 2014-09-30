@@ -34,6 +34,14 @@ public:
    virtual void giveMouseFocus(MouseHandler *handler){m_inner->giveMouseFocus(handler);}
    virtual void removeMouseFocus(){m_inner->removeMouseFocus();}
 
+   virtual void registerKeyCallback(KeyEvent e, UIKeyCallback cb){m_inner->registerKeyCallback(e, cb);}
+   virtual void unRegisterKeyCallback(KeyEvent e){m_inner->unRegisterKeyCallback(e);}
+   virtual bool onKeyEvent(KeyEvent e){return m_inner->onKeyEvent(e);}
+
+   virtual void registerControllerCallback(ControllerEvent e, UIControllerCallback cb){m_inner->registerControllerCallback(e, cb);}
+   virtual void unRegisterControllerCallback(ControllerEvent e){m_inner->unRegisterControllerCallback(e);}
+   virtual bool onControllerEvent(ControllerEvent e){return m_inner->onControllerEvent(e);}
+
    //UI Helpers
    virtual void registerMouseButton(int button, int action, int mods, UIMouseCallback cb){m_inner->registerMouseButton(button, action, mods, cb);}
    virtual void registerMouseMove(UIMouseCallback cb){m_inner->registerMouseMove(cb);}
@@ -43,6 +51,16 @@ public:
    virtual void unregisterMouseMove(){m_inner->unregisterMouseMove();}
    virtual void unregisterMouseScroll(int mods){m_inner->unregisterMouseScroll(mods);}
    virtual void unregisterMouseEnter(bool entered){m_inner->unregisterMouseEnter(entered);}
+
+   virtual void registerKeyboardKey(int key, int action, int mods, UIKeyCallback cb){m_inner->registerKeyboardKey(key, action, mods, cb);}
+   virtual void unregisterKeyboardKey(int key, int action, int mods){m_inner->unregisterKeyboardKey(key, action, mods);}
+
+   virtual void registerControllerPresence(bool attached, UIControllerCallback cb){m_inner->registerControllerPresence(attached, cb);}
+   virtual void registerControllerButton(int id, int button, int action, UIControllerCallback cb){m_inner->registerControllerButton(id, button, action, cb);}
+   virtual void registerControllerAxis(int id, int axis, int action, UIControllerCallback cb){m_inner->registerControllerAxis(id, axis, action, cb);}
+   virtual void unregisterControllerPresence(bool attached){m_inner->unregisterControllerPresence(attached);}
+   virtual void unregisterControllerButton(int id, int button, int action){m_inner->unregisterControllerButton(id, button, action);}
+   virtual void unregisterControllerAxis(int id, int axis, int action){m_inner->unregisterControllerAxis(id, axis, action);}
 
    //helpers
    virtual boost::optional<UIOptionVar> getOption(UIOption opt){return m_inner->getOption(opt);}

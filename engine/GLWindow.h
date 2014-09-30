@@ -23,6 +23,10 @@ public:
    typedef std::function<void(int key, int action, int mods)> KeyCallback;
    typedef std::function<void(unsigned int character)> CharCallback;
 
+   typedef std::function<void(int id, bool attached)> ControllerPresenceCallback;
+   typedef std::function<void(int id, int button, int action)> ControllerButtonCallback;
+   typedef std::function<void(int id, int axis, int action)> ControllerAxisCallback;
+
    GLWindow(Int2 winSize, std::string windowName, GLFWmonitor *monitor = nullptr);
    ~GLWindow();
 
@@ -45,5 +49,14 @@ public:
    void setMouseScrollCallback(MouseScrollCallback cb);
    void setKeyCallback(KeyCallback cb);
    void setCharCallback(CharCallback cb);
+
+   const char *getControllerName(int id);
+   void setControllerPresenceCallback(ControllerPresenceCallback cb);
+   void setControllerButtonCallback(ControllerButtonCallback cb);
+   void setControllerAxisCallback(ControllerAxisCallback cb);
+
+   int getKeyState(int key);
+   int getJoystickButtonState(int id, int button);
+   int getJoystickAxisState(int id, int axis);
 
 };

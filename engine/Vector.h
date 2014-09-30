@@ -25,7 +25,6 @@ public:
 typedef Vector2<float> Float2;
 typedef Vector2<int> Int2;
 
-
 template <typename T>
 class Vector3
 {

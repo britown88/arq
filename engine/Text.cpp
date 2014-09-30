@@ -170,7 +170,7 @@ void Font::buildFont()
    for(unsigned char i=0;i<128;i++)
    {
       //MatrixTransforms::translate(m_chars[i].model, 0.0f, m_maxHeight / 2.0f);
-      MatrixTransforms::scale(m_chars[i].model, m_chars[i].scaleX, m_chars[i].scaleY);
+      MatrixTransforms::scale(m_chars[i].model, (float)m_chars[i].scaleX, (float)m_chars[i].scaleY);
    }
 
    // We Don't Need The Face Information Now That The Display

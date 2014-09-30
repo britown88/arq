@@ -1,13 +1,18 @@
 #include "UIElement.h"
 #include "MouseHandler.h"
+#include "IOCContainer.h"
+#include "Application.h"
 
 UIElement::UIElement()
-   :m_parent(nullptr), m_mouseFocusHandler(nullptr), m_highestDecorator(this), m_inputParent(nullptr)
+   :m_parent(nullptr), m_mouseFocusHandler(nullptr), m_highestDecorator(this), m_inputParent(nullptr),
+   m_app(&(*IOC.resolve<Application>()))
 {
 }
 
 UIElement::~UIElement()
 {
+   m_app->removeFocus(this);
+
    if(m_mouseFocusHandler)
       m_mouseFocusHandler->resetMouseFocus();
 
@@ -65,6 +70,34 @@ bool UIElement::onMouseEvent(MouseEvent e)
    return false;         
 }
 
+void UIElement::registerKeyCallback(KeyEvent e, UIKeyCallback cb){m_keyCallbacks.insert(std::make_pair(e, cb));}
+void UIElement::unRegisterKeyCallback(KeyEvent e){m_keyCallbacks.erase(e);}
+bool UIElement::onKeyEvent(KeyEvent e)
+{
+   auto iter = m_keyCallbacks.find(e);
+   if(iter != m_keyCallbacks.end())
+   {
+      iter->second(e);
+      return true;
+   }
+
+   return false;  
+}
+
+void UIElement::registerControllerCallback(ControllerEvent e, UIControllerCallback cb){m_controllerCallbacks.insert(std::make_pair(e, cb));}
+void UIElement::unRegisterControllerCallback(ControllerEvent e){m_controllerCallbacks.erase(e);}
+bool UIElement::onControllerEvent(ControllerEvent e)
+{
+   auto iter = m_controllerCallbacks.find(e);
+   if(iter != m_controllerCallbacks.end())
+   {
+      iter->second(e);
+      return true;
+   }
+
+   return false;  
+}
+
 void UIElement::giveMouseFocus(MouseHandler *handler)
 {
    m_mouseFocusHandler = handler;
@@ -72,6 +105,68 @@ void UIElement::giveMouseFocus(MouseHandler *handler)
 void UIElement::removeMouseFocus()
 {
    m_mouseFocusHandler = nullptr;
+}
+
+void UIElement::registerKeyboardKey(int key, int action, int mods, UIKeyCallback cb)
+{
+   KeyEvent e(KeyEvent::Type::Key);
+   e.key = key;
+   e.action = action;
+   e.mods = mods;
+   registerKeyCallback(e, cb);
+}
+void UIElement::unregisterKeyboardKey(int key, int action, int mods)
+{
+   KeyEvent e(KeyEvent::Type::Key);
+   e.key = key;
+   e.action = action;
+   e.mods = mods;
+   unRegisterKeyCallback(e);
+}
+
+void UIElement::registerControllerPresence(bool attached, UIControllerCallback cb)
+{
+   ControllerEvent ce(ControllerEvent::Type::Presence);
+   ce.attached = attached;
+   registerControllerCallback(ce, cb);
+}
+void UIElement::registerControllerButton(int id, int button, int action, UIControllerCallback cb)
+{
+   ControllerEvent ce(ControllerEvent::Type::Button);
+   ce.id = id;
+   ce.buttonaxis = button;
+   ce.action = action;
+   registerControllerCallback(ce, cb);
+}
+void UIElement::registerControllerAxis(int id, int axis, int action, UIControllerCallback cb)
+{
+   ControllerEvent ce(ControllerEvent::Type::Axis);
+   ce.id = id;
+   ce.buttonaxis = axis;
+   ce.action = action;
+   registerControllerCallback(ce, cb);
+}
+void UIElement::unregisterControllerPresence(bool attached)
+{
+   ControllerEvent ce(ControllerEvent::Type::Presence);
+   ce.attached = attached;
+   unRegisterControllerCallback(ce);
+}
+void UIElement::unregisterControllerButton(int id, int button, int action)
+{
+   ControllerEvent ce(ControllerEvent::Type::Button);
+   ce.id = id;
+   ce.buttonaxis = button;
+   ce.action = action;
+   unRegisterControllerCallback(ce);
+}
+void UIElement::unregisterControllerAxis(int id, int axis, int action)
+{
+   ControllerEvent ce(ControllerEvent::Type::Axis);
+   ce.id = id;
+   ce.buttonaxis = axis;
+   ce.action = action;
+   unRegisterControllerCallback(ce);
 }
 
 void UIElement::registerMouseButton(int button, int action, int mods, UIMouseCallback cb)

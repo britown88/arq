@@ -3,6 +3,8 @@
 #include "Renderer.h"
 #include "Rect.h"
 #include "MouseEvent.h"
+#include "KeyEvent.h"
+#include "ControllerEvent.h"
 #include "ObjectHash.h"
 #include <functional>
 #include <unordered_map>
@@ -71,9 +73,11 @@ struct UIElementBounds
 };
 
 typedef std::function<void(MouseEvent &)> UIMouseCallback;
+typedef std::function<void(KeyEvent &)> UIKeyCallback;
+typedef std::function<void(ControllerEvent &)> UIControllerCallback;
 
 class MouseHandler;
-
+class Application;
 
 //All members must be virtual and added to UIDecoratorElement
 //calling m_inner's.  Decorators can then just implement UIDecoratorElement
@@ -83,27 +87,30 @@ class UIElement
    std::unordered_map<MouseEvent, 
       UIMouseCallback, ObjectHash<MouseEvent>> m_mouseCallbacks;
 
+   std::unordered_map<KeyEvent, 
+      UIKeyCallback, ObjectHash<KeyEvent>> m_keyCallbacks;
+
+   std::unordered_map<ControllerEvent, 
+      UIControllerCallback, ObjectHash<ControllerEvent>> m_controllerCallbacks;
+
    MouseHandler *m_mouseFocusHandler;
    boost::optional<UIOptionVar> m_options[UIOption::COUNT];
 
    std::vector<std::unique_ptr<UIElement>> m_internElements;
    UIElement *m_highestDecorator, *m_inputParent;
+   Application *m_app;
 protected:
    //overload this in decorators to ensure changes to the parent get reflected all the way down
    
    UIElement *m_parent;
 public:
    template<typename T>
-   T *intern(std::unique_ptr<UIElement> elem)
+   T *intern(std::unique_ptr<T> elem)
    {
+      auto out = elem.get();
       m_internElements.push_back(std::move(elem));
-      return dynamic_cast<T*>(m_internElements.back().get()); 
-   }
 
-   UIElement *intern(std::unique_ptr<UIElement> elem)
-   {
-      m_internElements.push_back(std::move(elem));
-      return m_internElements.back().get(); 
+      return out;
    }
 
    UIElement();
@@ -119,22 +126,42 @@ public:
    virtual void setInputParent(UIElement *e);
 
 
-   //UI
+   //Mouse
    virtual void registerMouseCallback(MouseEvent e, UIMouseCallback cb);
    virtual void unRegisterMouseCallback(MouseEvent e);
    virtual bool onMouseEvent(MouseEvent e);
    virtual void giveMouseFocus(MouseHandler *handler);
    virtual void removeMouseFocus();
 
+   //keys
+   virtual void registerKeyCallback(KeyEvent e, UIKeyCallback cb);
+   virtual void unRegisterKeyCallback(KeyEvent e);
+   virtual bool onKeyEvent(KeyEvent e);
+
+   //controller
+   virtual void registerControllerCallback(ControllerEvent e, UIControllerCallback cb);
+   virtual void unRegisterControllerCallback(ControllerEvent e);
+   virtual bool onControllerEvent(ControllerEvent e);
+
    //UI Helpers
    virtual void registerMouseButton(int button, int action, int mods, UIMouseCallback cb);
    virtual void registerMouseMove(UIMouseCallback cb);
    virtual void registerMouseScroll(int mods, UIMouseCallback cb);
-   virtual void registerMouseEnter(bool entered, UIMouseCallback cb);
+   virtual void registerMouseEnter(bool entered, UIMouseCallback cb);   
    virtual void unregisterMouseButton(int button, int action, int mods);
    virtual void unregisterMouseMove();
    virtual void unregisterMouseScroll(int mods);
    virtual void unregisterMouseEnter(bool entered);
+
+   virtual void registerKeyboardKey(int key, int action, int mods, UIKeyCallback cb);
+   virtual void unregisterKeyboardKey(int key, int action, int mods);
+
+   virtual void registerControllerPresence(bool attached, UIControllerCallback cb);
+   virtual void registerControllerButton(int id, int button, int action, UIControllerCallback cb);
+   virtual void registerControllerAxis(int id, int axis, int action, UIControllerCallback cb);
+   virtual void unregisterControllerPresence(bool attached);
+   virtual void unregisterControllerButton(int id, int button, int action);
+   virtual void unregisterControllerAxis(int id, int axis, int action);
 
    //helpers
    virtual boost::optional<UIOptionVar> getOption(UIOption opt);

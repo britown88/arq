@@ -178,7 +178,7 @@ public:
    {
       auto &cList = getComplexComponentList<T>();
 
-      if(index >= cList.components.size())
+      if((unsigned int)index >= cList.components.size())
          cList.components.resize(index + 1);
 
       return cList.components[index];
@@ -243,7 +243,7 @@ public:
          list.lists.back().next = list.lists.back().prev = missing;
       }
 
-      if(index >= list.components.size())
+      if((unsigned int)index >= list.components.size())
          list.components.resize(index + 1);
 
       list.components[index].push_back(comp);

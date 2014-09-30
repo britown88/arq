@@ -13,8 +13,5 @@ public:
    KeyHandler(GLWindow *win);
    ~KeyHandler();
 
-   void performKeyEvents(UIElement &rootElement);
-   
-   //removes focus from any currently focused element
-   void resetKeyFocus();
+   void performKeyEvents(UIElement &focusedElement);
 };

@@ -74,8 +74,8 @@ public:
          break;
       };
 
-      m_inner->registerMouseButton(Input::MouseLeft, Input::Press, 0, [&](MouseEvent e){onMouseDown(e.x, e.y);});
-      m_inner->registerMouseButton(Input::MouseLeft, Input::Release, 0, [&](MouseEvent e){onMouseUp(e.x, e.y);});
+      m_inner->registerMouseButton(Input::MouseLeft, Input::Press, 0, [&](MouseEvent e){onMouseDown((float)e.x, (float)e.y);});
+      m_inner->registerMouseButton(Input::MouseLeft, Input::Release, 0, [&](MouseEvent e){onMouseUp((float)e.x, (float)e.y);});
       m_inner->registerMouseMove([&](MouseEvent e){onMouseMove(e.x, e.y);});
    }
 

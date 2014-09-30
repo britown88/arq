@@ -1,0 +1,29 @@
+{
+	"type": "character",
+	"name": "chen",
+
+	"runsprite": "chenrun",
+	"idlesprite": "chenidle",
+	"jumpupsprite": "chenjumpup",
+	"jumpdownsprite": "chenjumpdown"
+}
+
+{
+	"type": "character",
+	"name": "tewi",
+
+	"runsprite": "tewirun",
+	"idlesprite": "tewiidle",
+	"jumpupsprite": "tewijumpup",
+	"jumpdownsprite": "tewijumpdown"
+}
+
+{
+	"type": "character",
+	"name": "sirlayersworth",
+
+	"runsprite": "slrun",
+	"idlesprite": "slidle",
+	"jumpupsprite": "sljumpup",
+	"jumpdownsprite": "sljumpdown"
+}

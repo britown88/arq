@@ -1,7 +1,6 @@
 #include "MatrixManager.h"
 
 #include "CoreComponents.h"
-#include "Skeletal.h"
 
 struct TMatrixComponent : public Component
 {
@@ -14,31 +13,6 @@ REGISTER_COMPONENT(TMatrixComponent)
 
 class MatrixManagerImpl : public Manager<MatrixManagerImpl, MatrixManager>
 {
-   void updateSkeletalLimb(Entity *e, const TMatrixComponent &mc)
-   {
-      if(auto skeletalLimb = e->get<SkeletalLimbComponent>())
-      {
-         if(auto parent = skeletalLimb->skeletalParent)
-         {
-            if(auto parentSkeleton = parent->get<SkeletalLimbComponent>())
-            if(auto parentMatrix = parent->get<TMatrixComponent>())
-            //if(auto parentgbc = parent->get<GraphicalBoundsComponent>())
-            {
-               if(parentMatrix->dirty)
-                  clean(skeletalLimb->skeletalParent);
-
-               auto &nodePos = parentSkeleton->getNodePosition(skeletalLimb->attachedNode);
-               Matrix t = parentMatrix->unscaled;
-
-               //MatrixTransforms::translate(t, -parentgbc->center.x, -parentgbc->center.y);
-               MatrixTransforms::translate(t, nodePos.x, nodePos.y);
-
-               mc.unscaled = mc.unscaled * t;
-            }
-         }
-      }
-   }
-
    void clean(Entity *e)
    {
       if(auto mc = e->get<TMatrixComponent>())
@@ -49,6 +23,7 @@ class MatrixManagerImpl : public Manager<MatrixManagerImpl, MatrixManager>
          auto pc = e->get<PositionComponent>();
          auto gbc = e->get<GraphicalBoundsComponent>();
          auto rc = e->get<RotationComponent>();
+         auto cc = e->get<CenterComponent>();
 
          if(pc)
          {
@@ -61,13 +36,15 @@ class MatrixManagerImpl : public Manager<MatrixManagerImpl, MatrixManager>
             size.x = gbc->size.x;
             size.y = gbc->size.y;
 
-            pos.x -= gbc->center.x;
-	         pos.y -= gbc->center.y;
+         }
 
+         if(cc)
+         {
+            pos.x -= cc->center.x;
+	         pos.y -= cc->center.y;
          }
 
          MatrixTransforms::identity(mc->unscaled);
-         updateSkeletalLimb(e, *mc);
          MatrixTransforms::translate(mc->unscaled, pos.x, pos.y);
          if(rc)
          {
@@ -90,13 +67,6 @@ class MatrixManagerImpl : public Manager<MatrixManagerImpl, MatrixManager>
    {
       if(auto mc = e->get<TMatrixComponent>())
          mc->dirty = true;
-
-      //dirty the children
-      if(auto skel = e->get<SkeletalLimbComponent>())
-      {
-         for(auto &&child : skel->nodes)
-            makeDirty(child.second.entity);
-      }
    }
 
 public:

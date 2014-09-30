@@ -50,10 +50,10 @@ VBOPtr GameHelpers::standardRectangleVBO()
 VBOPtr GameHelpers::gradientRectangleVBO()
 {
    static VBOPtr standardMesh = _buildStandardRectVBO(
-      Colorf(1, 1, 1), 
-      Colorf(1, 1, 1), 
-      Colorf(0.15, 0.15, 0.15), 
-      Colorf(0.15, 0.15, 0.15));
+      Colorf(1.0f, 1.0f, 1.0f), 
+      Colorf(1.0f, 1.0f, 1.0f), 
+      Colorf(0.15f, 0.15f, 0.15f), 
+      Colorf(0.15f, 0.15f, 0.15f));
    return standardMesh;
 }
 

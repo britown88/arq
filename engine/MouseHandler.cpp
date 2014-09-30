@@ -124,7 +124,7 @@ public:
             auto element = *iter;
             ++i;
 
-            if(element->getBounds().outerClipped.contains(Float2(e.x, e.y)) || 
+            if(element->getBounds().outerClipped.contains(Float2((float)e.x, (float)e.y)) || 
                e.type == MouseEvent::Type::Enter)
             {
                if(element->onMouseEvent(e))

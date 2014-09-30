@@ -21,6 +21,19 @@ struct PositionComponent : public Component
    PositionComponent(Float2 pos):pos(pos){}
 };
 
+struct CollisionBoxComponent : public Component
+{
+   Rectf aabb;
+   CollisionBoxComponent(){}
+   CollisionBoxComponent(float x, float y, float width, float height)
+   {
+      aabb.left = x;
+      aabb.right = x + width;
+      aabb.top = y;
+      aabb.bottom = y + height;
+   }
+};
+
 struct MeshComponent : public Component
 {
    IBOPtr ibo;
@@ -31,12 +44,25 @@ struct MeshComponent : public Component
    MeshComponent(IBOPtr ibo, VBOPtr vbo, Colorf c):ibo(ibo), vbo(vbo), c(c){}
 };
 
+struct SpriteComponent : public Component
+{
+   InternString sprite;
+   SpriteComponent():sprite(nullptr){}
+   SpriteComponent(InternString sprite):sprite(sprite){}
+};
+
 struct GraphicalBoundsComponent : public Component
 {
-   Float2 size, center;
+   Float2 size;
    GraphicalBoundsComponent(){}
    GraphicalBoundsComponent(Float2 size):size(size){}
-   GraphicalBoundsComponent(Float2 size, Float2 center):size(size), center(center){}
+};
+
+struct CenterComponent : public Component
+{
+   Float2 center;
+   CenterComponent(){}
+   CenterComponent(Float2 center):center(center){}
 };
 
 struct RotationComponent : public Component
@@ -68,7 +94,9 @@ struct TextureComponent : public Component
    //sets blend values to default,
    //used for CPP implemenetation
    void defaultBlend();
-   TextureComponent(){}
+   TextureComponent():
+      flipX(false), flipY(false), filePath(nullptr),
+      filterType(FilterType::Nearest), repeatType(RepeatType::Clamp){defaultBlend();}
    TextureComponent(InternString filePath):
       flipX(false), flipY(false), filePath(filePath),
       filterType(FilterType::Nearest), repeatType(RepeatType::Clamp)
