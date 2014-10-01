@@ -79,7 +79,6 @@
     <ClInclude Include="GridManager.h" />
     <ClInclude Include="InputManager.h" />
     <ClInclude Include="PartitionManager.h" />
-    <ClInclude Include="PhysicsManager.h" />
     <ClInclude Include="CollisionManager.h" />
     <ClInclude Include="RenderManager.h" />
     <ClInclude Include="ArqComponents.h" />

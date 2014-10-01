@@ -26,18 +26,10 @@ public:
 
          if(auto pc = comp.parent->lock<PositionComponent>())
          {
-            float remainingTime = 1.0f;
-            
-            if (auto rem = comp.parent->get<TRemainingTimeComponent>())
-               remainingTime = rem->remainingTime;
-
-            pc->pos.x += comp.velocity.x * remainingTime * dt;
-            pc->pos.y += comp.velocity.y * remainingTime * dt;
+            pc->pos.x += comp.velocity.x * dt;
+            pc->pos.y += comp.velocity.y * dt;
          }
-         
       }
-
-
    }
 };
 

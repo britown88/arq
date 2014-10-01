@@ -232,21 +232,7 @@ bool checkGridCollision(EntitySystem *system, Entity *e, Float2 &normalOut, floa
          checkGridCollision(system, e, normalOut, remainingTime);
       }
 
-      if(auto pc = e->get<PositionComponent>())
-      if(auto rtc = e->get<TRemainingTimeComponent>())
-      {
-         rtc->deltaPosition.x = pc->pos.x - savedPos.x;
-         rtc->deltaPosition.y = pc->pos.y - savedPos.y;
-      }
-
       return true;
-   }
-
-   if(auto pc = e->get<PositionComponent>())
-   if(auto rtc = e->get<TRemainingTimeComponent>())
-   {
-      rtc->deltaPosition.x = pc->pos.x - savedPos.x;
-      rtc->deltaPosition.y = pc->pos.y - savedPos.y;
    }
 
    return false;

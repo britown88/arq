@@ -18,7 +18,7 @@ namespace Input
       extern const int LeftStickIn;
       extern const int RightStickIn;
 
-      extern const int DpadUp;
+      extern const int DPadUp;
       extern const int DPadRight;
       extern const int DPadDown;
       extern const int DPadLeft;

@@ -22,11 +22,5 @@ struct CharacterComponent : public Component
       idleSprite(nullptr),  jumpUpSprite(nullptr),  jumpDownSprite(nullptr){}
 };
 
-struct CarriedComponent : public Component
-{
-   Entity *carrier;
-   CarriedComponent(Entity *carrier):carrier(carrier){}
-};
-
 
 
