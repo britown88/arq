@@ -1,29 +1,15 @@
 {
 	"type": "character",
-	"name": "chen",
+	"name": "shumpfguy",
 
-	"runsprite": "chenrun",
-	"idlesprite": "chenidle",
-	"jumpupsprite": "chenjumpup",
-	"jumpdownsprite": "chenjumpdown"
+	"upIdleSprite": "shumpfidlerun",
+	"downIdleSprite": "shumpfidledown",
+	"sideIdleSprite": "shumpfidleside",
+	"upRunSprite": "shumpfrunup",
+	"downRunSprite": "shumpfrundown",
+	"leftRunSprite": "shumpfrunleft"
+	"rightRunSprite": "shumpfrunright"
+
 }
 
-{
-	"type": "character",
-	"name": "tewi",
 
-	"runsprite": "tewirun",
-	"idlesprite": "tewiidle",
-	"jumpupsprite": "tewijumpup",
-	"jumpdownsprite": "tewijumpdown"
-}
-
-{
-	"type": "character",
-	"name": "sirlayersworth",
-
-	"runsprite": "slrun",
-	"idlesprite": "slidle",
-	"jumpupsprite": "sljumpup",
-	"jumpdownsprite": "sljumpdown"
-}

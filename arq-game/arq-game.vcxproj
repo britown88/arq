@@ -73,7 +73,7 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="CharacterManager.h" />
+    <ClInclude Include="ActorManager.h" />
     <ClInclude Include="GameData.h" />
     <ClInclude Include="GridEditor.h" />
     <ClInclude Include="GridManager.h" />
@@ -85,7 +85,7 @@
     <ClInclude Include="ArqGame.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="CharacterManager.cpp" />
+    <ClCompile Include="ActorManager.cpp" />
     <ClCompile Include="GameData.cpp" />
     <ClCompile Include="GridEditor.cpp" />
     <ClCompile Include="GridManager.cpp" />

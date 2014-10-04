@@ -21,6 +21,8 @@ public:
    virtual Entity *entityAt(Int2 pos)=0;
    virtual Int2 gridPosition(Float2 worldPos)=0;
 
+   virtual void updateGridCollisions()=0;
+
 };
 
 

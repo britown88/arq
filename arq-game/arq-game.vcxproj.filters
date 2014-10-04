@@ -27,9 +27,6 @@
     <ClCompile Include="GridEditor.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="CharacterManager.cpp">
-      <Filter>Source Files\Managers</Filter>
-    </ClCompile>
     <ClCompile Include="GridManager.cpp">
       <Filter>Source Files\Managers</Filter>
     </ClCompile>
@@ -51,6 +48,9 @@
     <ClCompile Include="ArqGame.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="ActorManager.cpp">
+      <Filter>Source Files\Managers</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="GameData.h">
@@ -58,9 +58,6 @@
     </ClInclude>
     <ClInclude Include="GridEditor.h">
       <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="CharacterManager.h">
-      <Filter>Header Files\Managers</Filter>
     </ClInclude>
     <ClInclude Include="GridManager.h">
       <Filter>Header Files\Managers</Filter>
@@ -82,6 +79,9 @@
     </ClInclude>
     <ClInclude Include="ArqComponents.h">
       <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ActorManager.h">
+      <Filter>Header Files\Managers</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

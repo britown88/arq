@@ -12,14 +12,28 @@ struct VelocityComponent : public Component
    VelocityComponent(Float2 maxVelocity):maxVelocity(maxVelocity){}
 };
 
-struct CharacterComponent : public Component
+struct ActorComponent : public Component
 {
    int playerNumber;
 
-   InternString runSprite, idleSprite, jumpUpSprite, jumpDownSprite;
+   InternString   upIdleSprite, 
+                  downIdleSprite, 
+                  leftIdleSprite, 
+                  rightIdleSprite,
+                  upRunSprite, 
+                  downRunSprite, 
+                  leftRunSprite,
+                  rightRunSprite;
 
-   CharacterComponent():playerNumber(playerNumber), runSprite(nullptr),  
-      idleSprite(nullptr),  jumpUpSprite(nullptr),  jumpDownSprite(nullptr){}
+   ActorComponent():playerNumber(playerNumber), 
+                     upIdleSprite(nullptr),  
+                     downIdleSprite(nullptr),  
+                     leftIdleSprite(nullptr),  
+                     rightIdleSprite(nullptr),  
+                     upRunSprite(nullptr),
+                     downRunSprite(nullptr),
+                     leftRunSprite(nullptr),
+                     rightRunSprite(nullptr){}
 };
 
 

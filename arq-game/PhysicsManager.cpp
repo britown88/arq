@@ -4,7 +4,6 @@
 #include "engine\IOCContainer.h"
 #include "engine\Application.h"
 #include "engine\CoreComponents.h"
-#include "CharacterManager.h"
 
 REGISTER_COMPONENT(VelocityComponent);
 
@@ -26,8 +25,8 @@ public:
 
          if(auto pc = comp.parent->lock<PositionComponent>())
          {
-            pc->pos.x += comp.velocity.x * dt;
-            pc->pos.y += comp.velocity.y * dt;
+            pc->pos.x += comp.velocity.x/* * dt*/;
+            pc->pos.y += comp.velocity.y/* * dt*/;
          }
       }
    }

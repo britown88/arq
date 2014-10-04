@@ -2,7 +2,7 @@
 #include "engine\Component.h"
 #include "ArqComponents.h"
 #include "GameData.h"
-#include "CharacterManager.h"
+#include "ActorManager.h"
 #include "engine\InputDefinitions.h";
 #include "engine\InputDefinitions360.h"
 #include "engine\KeyEvent.h"
@@ -76,14 +76,14 @@ public:
       m_element->unregisterKeyboardKey(Input::KeyDown, Input::Release, 0);
    }
 
-   void onLeftPress(int player){m_system->getManager<CharacterManager>()->moveLeft(player);}   
-   void onLeftRelease(int player){m_system->getManager<CharacterManager>()->stopLeft(player);}
-   void onRightPress(int player){m_system->getManager<CharacterManager>()->moveRight(player);}
-   void onRightRelease(int player){m_system->getManager<CharacterManager>()->stopRight(player);}
-   void onUpPress(int player){m_system->getManager<CharacterManager>()->moveUp(player);}
-   void onUpRelease(int player){m_system->getManager<CharacterManager>()->stopUp(player);}
-   void onDownPress(int player){m_system->getManager<CharacterManager>()->moveDown(player);}
-   void onDownRelease(int player){m_system->getManager<CharacterManager>()->stopDown(player);}
+   void onLeftPress(int player){m_system->getManager<ActorManager>()->moveLeft(player);}   
+   void onLeftRelease(int player){m_system->getManager<ActorManager>()->stopLeft(player);}
+   void onRightPress(int player){m_system->getManager<ActorManager>()->moveRight(player);}
+   void onRightRelease(int player){m_system->getManager<ActorManager>()->stopRight(player);}
+   void onUpPress(int player){m_system->getManager<ActorManager>()->moveUp(player);}
+   void onUpRelease(int player){m_system->getManager<ActorManager>()->stopUp(player);}
+   void onDownPress(int player){m_system->getManager<ActorManager>()->moveDown(player);}
+   void onDownRelease(int player){m_system->getManager<ActorManager>()->stopDown(player);}
 
    static void registerComponentCallbacks(Manager<InputManagerImpl, InputManager> &m)
    {

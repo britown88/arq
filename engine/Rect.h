@@ -51,6 +51,14 @@ public:
       right += offset.x;
    }  
 
+   void offset(const T x, const T y)
+   {
+      top += y;
+      bottom += y;
+      left += x;
+      right += x;
+   } 
+
    void inset(const Vector2<T> &inset)
    {
       top += inset.y;

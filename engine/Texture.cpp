@@ -170,6 +170,9 @@ public:
 
    void acquire()
    {
+      if(!m_request.path)
+         return;
+
       m_buffer = loadPng(*m_request.path);
 
       glEnable(GL_TEXTURE_2D);

@@ -2,7 +2,7 @@
 #include "engine\Component.h"
 #include "engine\CoreComponents.h"
 #include "ArqComponents.h"
-#include "CharacterManager.h"
+#include "ActorManager.h"
 
 #include "engine\Logs.h"
 #include "engine\Application.h"
@@ -157,6 +157,163 @@ public:
 
       return ret;
    }
+
+   void updateGridCollisions()
+   {
+      for (auto comp : m_system->getComponentVector<VelocityComponent>())
+      {
+         Float2 v = comp.velocity;
+
+         bool moveLeft = v.x < 0,
+         moveRight = v.x > 0,
+         moveUp = v.y < 0,
+         moveDown = v.y > 0;
+       
+         bool moveVert = moveUp || moveDown;
+         bool moveHorz = moveLeft || moveRight;
+
+         if(!moveHorz && !moveVert)
+            continue;
+
+          //future aabbs and for only vertical or only horizontal movement
+         Rectf bounds = ComponentHelpers::getCollisionBox(comp.parent);
+         Rectf fAABB, fHorzAABB, fVertAABB;
+         fAABB = fHorzAABB = fVertAABB = bounds;
+
+         fAABB.offset(v);
+ 
+         auto collidingBlocks = collisionAt(fAABB);
+         if(!collidingBlocks.empty()) 
+         {
+            if(moveHorz)
+               fHorzAABB.offset(v.x, 0.0f);
+
+            if(moveVert)
+               fVertAABB.offset(0.0f, v.y);
+ 
+            boost::optional<float> edgeLeft, edgeRight, edgeTop, edgeBottom;
+            boost::optional<Float2> topLeft, topRight, bottomLeft, bottomRight;
+
+            bool hitCorner = false;
+   
+            for(auto block : collidingBlocks) 
+            {
+               Rectf bbounds = ComponentHelpers::getCollisionBox(block);
+       
+               //skip if bordering an existing edge
+               if(   edgeLeft && bbounds.left == *edgeLeft ||
+                     edgeRight && bbounds.right == *edgeRight ||
+                     edgeTop && bbounds.top == *edgeTop ||
+                     edgeBottom && bbounds.bottom == *edgeBottom)
+                  continue;
+       
+               //determine which of the mvoements caused the collision
+
+               bool vertCollids = bbounds.contains(fVertAABB);
+               bool horzCollides = bbounds.contains(fHorzAABB);
+
+               bool causedByHorz = !moveVert || !vertCollids;
+               bool causedByVert = !moveHorz || !horzCollides;
+
+               if(causedByHorz && causedByVert)
+               {
+                  hitCorner = true;
+                  //hit on a corner, save the corner info to defer until later
+                  if(moveUp && moveLeft) bottomRight = Float2(bbounds.right, bbounds.bottom);
+                  else if(moveUp && moveRight) bottomLeft = Float2(bbounds.left, bbounds.bottom);
+                  else if(moveDown && moveLeft) topRight = Float2(bbounds.right, bbounds.top);
+                  else if(moveDown && moveRight) topLeft = Float2(bbounds.left, bbounds.top);
+               }
+               else
+               {
+                  //set colliding edges accordingly
+                  if(causedByHorz) 
+                  {
+                     if(moveLeft && (!edgeRight || bbounds.right > *edgeRight)) edgeRight = bbounds.right;
+                     if(moveRight && (!edgeLeft || bbounds.left < *edgeLeft)) edgeLeft = bbounds.left;
+                  }
+       
+                  if(causedByVert) 
+                  {
+                     if(moveUp && (!edgeBottom || bbounds.bottom > *edgeBottom)) edgeBottom = bbounds.bottom;
+                     if(moveDown && (!edgeTop || bbounds.top < *edgeTop)) edgeTop = bbounds.top;
+                  }
+               }
+            }
+
+            //resolvecorners
+            if(hitCorner)
+            {
+               //the goal here is to only use a corner to define edges if both of those edges never got set by other blocks
+               if(topLeft && !edgeTop && !edgeLeft)
+               {
+                  if(fAABB.right - topLeft->x > fAABB.bottom - topLeft->y)
+                     edgeTop = topLeft->y; 
+                  else
+                     edgeLeft = topLeft->x;
+               }
+               else if(topRight && !edgeTop && !edgeRight)
+               {
+                  if(topRight->x - fAABB.left > fAABB.bottom - topRight->y)
+                     edgeTop = topRight->y; 
+                  else
+                     edgeRight = topRight->x;
+               }
+               else if(bottomLeft && !edgeBottom && !edgeLeft)
+               {
+                  if(fAABB.right - bottomLeft->x > bottomLeft->y - fAABB.top)
+                     edgeBottom = bottomLeft->y; 
+                  else
+                     edgeLeft = bottomLeft->x;
+               }
+               else if(bottomRight && !edgeBottom && !edgeRight)
+               {
+                  if(bottomRight->x - fAABB.left > bottomRight->y - fAABB.top)
+                     edgeBottom = bottomRight->y; 
+                  else
+                     edgeRight = bottomRight->x;
+               }
+            }
+   
+            //determine how to offset the actor depending on which edges exist
+            Float2 offset;
+   
+            if(edgeLeft) 
+            {
+               offset.x += *edgeLeft - bounds.right;
+               v.x = 0.0f;
+            }
+   
+            if(edgeRight) 
+            {
+               offset.x -= bounds.left - *edgeRight;
+               v.x = 0.0f;
+            }
+   
+            if(edgeTop) 
+            {
+               offset.y += *edgeTop - bounds.bottom;
+               v.y = 0.0f;
+            }
+   
+            if(edgeBottom) 
+            {
+               offset.y -= bounds.top - *edgeBottom;
+               v.y = 0.0f;
+            }
+
+            //offset.x += offset.x > 0.0f ? -GameMath::Epsilon : (offset.x < 0.0f ? GameMath::Epsilon : 0.0f);
+            //offset.y += offset.y > 0.0f ? -GameMath::Epsilon : (offset.y < 0.0f ? GameMath::Epsilon : 0.0f);
+   
+            //update position and velocity
+            if(auto pc = comp.parent->lock<PositionComponent>())
+               pc->pos += offset;
+       
+            if(auto vc = comp.parent->lock<VelocityComponent>())
+               vc->velocity = v;
+         }
+      }
+   }
 };
 
 std::unique_ptr<GridManager> buildGridManager()
@@ -164,76 +321,3 @@ std::unique_ptr<GridManager> buildGridManager()
    return std::unique_ptr<GridManager>(new GridManagerImpl());
 }
 
-bool checkGridCollision(EntitySystem *system, Entity *e, Float2 &normalOut, float& remainingTime)
-{
-   float t = remainingTime * IOC.resolve<Application>()->dt();
-   bool hasCollision = false;
-
-   Float2 savedPos;
-
-   if(auto pc = e->lock<PositionComponent>())
-   if(auto vc = e->lock<VelocityComponent>())
-   {
-      savedPos = pc->pos;
-      auto aabb = ComponentHelpers::getCollisionBox(e);
-      Float2 scaledVelocity = vc->velocity * t;
-
-      auto futureaabb = aabb;
-      futureaabb.offset(scaledVelocity);
-      auto gridCollisions = system->getManager<GridManager>()->collisionAt(futureaabb);
-
-      if(!gridCollisions.empty())
-      {
-         float moveAmnt = 1.0f;
-         Float2 normal, colNormal;
-         for(auto block : gridCollisions)
-         {
-            auto blockBounds = ComponentHelpers::getCollisionBox(block);
-            auto time = GameMath::offsetCollisionTime(aabb, scaledVelocity, blockBounds, colNormal) - GameMath::Epsilon;
-
-            if(time < moveAmnt)
-            {
-               moveAmnt = time;
-               normal = colNormal;
-            }
-         }
-
-         //clipped into ground then clipped into wall
-         //the problem here is that we aren't updating the position here based on the velocity, things actually move *faster*
-         //when colliding because they are offset then run! D:
-         if(moveAmnt < 1.0f)
-         {
-            if (moveAmnt < 0.0f) moveAmnt = 0.0f;
-
-            remainingTime -= moveAmnt;
-
-            pc->pos.x += scaledVelocity.x * moveAmnt;
-            pc->pos.y += scaledVelocity.y * moveAmnt;
-                     
-            auto next = GameMath::perp2D(normal);
-            float scale = GameMath::dot(next, vc->velocity);
-
-            vc->velocity.x = next.x * scale;
-            vc->velocity.y = next.y * scale;
-
-            normalOut = normal;
-
-            hasCollision = true;
-         }
-      }
-   }
-
-   if (hasCollision)
-   {
-      //damping
-      remainingTime -= 0.1f;
-      if (remainingTime > 0.0f)
-      {
-         checkGridCollision(system, e, normalOut, remainingTime);
-      }
-
-      return true;
-   }
-
-   return false;
-}

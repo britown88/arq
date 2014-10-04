@@ -19,7 +19,7 @@
 #include "ArqComponents.h"
 #include "PhysicsManager.h"
 #include "InputManager.h"
-#include "CharacterManager.h"
+#include "ActorManager.h"
 #include "RenderManager.h"
 #include "PartitionManager.h"
 
@@ -37,7 +37,7 @@ class ArqGame : public Tool
 
    CoreUI::WorldUIElement *m_worldElement;
 
-   std::unordered_map<std::string, CharacterComponent> m_characterTemplates;
+   std::unordered_map<std::string, ActorComponent> m_characterTemplates;
    
 
    void buildBlock(Recti cellRange)
@@ -78,25 +78,25 @@ class ArqGame : public Tool
 
       for(int i = 0; i < 3; ++i)
       {
-         float size = 128;
+         float size = 50.0f;
          auto e = m_system.createEntity();
          e->add(PositionComponent(Float2(100 * (i+1), 0)));
          e->add(GraphicalBoundsComponent(Float2(size, size)));
          //e->add(CollisionBoxComponent(0, 0, size, size));
-         e->add(CollisionBoxComponent(44, 64, 40, 60));
+         e->add(CollisionBoxComponent(12, 14, 26, 31));
          e->add(MeshComponent(ibo, vbo, Colorf(1, 1, 1)));
          e->add(RotationComponent(0.0f, Float2(size/2.0f, size/2.0f)));
          e->add(TextureComponent());
 
          e->add(VelocityComponent(Float2(50.0f, 50.0f)));
 
-         auto iter = m_characterTemplates.find("sirlayersworth");
+         auto iter = m_characterTemplates.find("shumpfguy");
          if(iter != m_characterTemplates.end())
          {
-            CharacterComponent cc = iter->second;
+            ActorComponent cc = iter->second;
             cc.playerNumber = i;
 
-            e->add(SpriteComponent(cc.idleSprite));
+            e->add(SpriteComponent(cc.downRunSprite));
             e->add(cc);
          }
 
@@ -132,7 +132,7 @@ class ArqGame : public Tool
       m_system.addManager(buildMatrixManager());
       m_system.addManager(buildPhysicsManager());
       m_system.addManager(buildInputManager(getDlgElement()));
-      m_system.addManager(buildCharacterManager());
+      m_system.addManager(buildActorManager());
       m_system.addManager(buildGridManager());
    }
 
@@ -154,11 +154,15 @@ class ArqGame : public Tool
          if(auto name = p["name"].get<std::string>())
          {
             auto st = IOC.resolve<StringTable>();
-            CharacterComponent cc;
-            if(auto str = p["runsprite"].get<std::string>()) cc.runSprite = st->get(*str);
-            if(auto str = p["idlesprite"].get<std::string>()) cc.idleSprite = st->get(*str);
-            if(auto str = p["jumpupsprite"].get<std::string>()) cc.jumpUpSprite = st->get(*str);
-            if(auto str = p["jumpdownsprite"].get<std::string>()) cc.jumpDownSprite = st->get(*str);
+            ActorComponent cc;
+            if(auto str = p["upIdleSprite"].get<std::string>()) cc.upIdleSprite = st->get(*str);
+            if(auto str = p["downIdleSprite"].get<std::string>()) cc.downIdleSprite = st->get(*str);
+            if(auto str = p["leftIdleSprite"].get<std::string>()) cc.leftIdleSprite = st->get(*str);
+            if(auto str = p["leftIdleSprite"].get<std::string>()) cc.rightIdleSprite = st->get(*str);
+            if(auto str = p["upRunSprite"].get<std::string>()) cc.upRunSprite = st->get(*str);
+            if(auto str = p["downRunSprite"].get<std::string>()) cc.downRunSprite = st->get(*str);
+            if(auto str = p["leftRunSprite"].get<std::string>()) cc.leftRunSprite = st->get(*str);
+            if(auto str = p["rightRunSprite"].get<std::string>()) cc.rightRunSprite = st->get(*str);
 
             m_characterTemplates.insert(std::make_pair(*name, cc));
          }
@@ -184,7 +188,7 @@ public:
       buildTestEntities();
 
       m_worldElement = getDlgElement()->intern<CoreUI::WorldUIElement>(CoreUI::buildWorldUIElement(Rectf(), m_system.getManager<RenderManager>()));
-      m_worldElement->cameraBounds() = Rectf(0, 0, 1920, 1080);
+      m_worldElement->cameraBounds() = Rectf(0, 0, 455, 256);
       m_worldElement->anchorToParent();
 
       getDlgElement()->intern(createGridEditor(m_worldElement, &m_system));
@@ -196,10 +200,10 @@ public:
 
    void onStep()
    {
-
-      m_system.getManager<CharacterManager>()->update();
+      m_system.getManager<ActorManager>()->update();
+      m_system.getManager<GridManager>()->updateGridCollisions();  
       m_system.getManager<PhysicsManager>()->update();
-      
+          
    }
 
    void onClose()
