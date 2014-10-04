@@ -3,30 +3,21 @@
 #include "ArqComponents.h"
 #include "GameData.h"
 #include "ActorManager.h"
-#include "engine\InputDefinitions.h";
+#include "engine\InputDefinitions.h"
 #include "engine\InputDefinitions360.h"
 #include "engine\KeyEvent.h"
 #include "engine\IOCContainer.h"
 #include "engine\Application.h"
 
-struct InputPlayer
-{
-   int controllerId;
-   bool attached;
-
-   InputPlayer():attached(false), controllerId(0){}
-};
+REGISTER_COMPONENT(PlayerControlledComponent);
 
 class InputManagerImpl : public Manager<InputManagerImpl, InputManager>
 {
    UIElement *m_element;
-   std::vector<InputPlayer> m_connectedPlayers;
    Application &app;
 public:
    InputManagerImpl(UIElement *element):m_element(element), app(*IOC.resolve<Application>())
    {
-      m_connectedPlayers.resize(GameData::PlayerCount, InputPlayer());
-
       registerKeyboard();
    }
 
@@ -37,14 +28,14 @@ public:
 
    void registerKeyboard()
    {
-      auto leftPress = [=](KeyEvent ce){onLeftPress(0);};
-      auto leftRelease = [=](KeyEvent ce){onLeftRelease(0);};
-      auto rightPress = [=](KeyEvent ce){onRightPress(0);};
-      auto rightRelease = [=](KeyEvent ce){onRightRelease(0);};
-      auto upPress = [=](KeyEvent ce){onUpPress(0);};
-      auto upRelease = [=](KeyEvent ce){onUpRelease(0);};
-      auto downPress = [=](KeyEvent ce){onDownPress(0);};
-      auto downRelease = [=](KeyEvent ce){onDownRelease(0);};
+      auto leftPress = [=](KeyEvent ce){onLeftPress();};
+      auto leftRelease = [=](KeyEvent ce){onLeftRelease();};
+      auto rightPress = [=](KeyEvent ce){onRightPress();};
+      auto rightRelease = [=](KeyEvent ce){onRightRelease();};
+      auto upPress = [=](KeyEvent ce){onUpPress();};
+      auto upRelease = [=](KeyEvent ce){onUpRelease();};
+      auto downPress = [=](KeyEvent ce){onDownPress();};
+      auto downRelease = [=](KeyEvent ce){onDownRelease();};
 
       //auto APress = [=](KeyEvent ce){onAPress(0);};
       //auto ARelease = [=](KeyEvent ce){onARelease(0);};
@@ -76,14 +67,20 @@ public:
       m_element->unregisterKeyboardKey(Input::KeyDown, Input::Release, 0);
    }
 
-   void onLeftPress(int player){m_system->getManager<ActorManager>()->moveLeft(player);}   
-   void onLeftRelease(int player){m_system->getManager<ActorManager>()->stopLeft(player);}
-   void onRightPress(int player){m_system->getManager<ActorManager>()->moveRight(player);}
-   void onRightRelease(int player){m_system->getManager<ActorManager>()->stopRight(player);}
-   void onUpPress(int player){m_system->getManager<ActorManager>()->moveUp(player);}
-   void onUpRelease(int player){m_system->getManager<ActorManager>()->stopUp(player);}
-   void onDownPress(int player){m_system->getManager<ActorManager>()->moveDown(player);}
-   void onDownRelease(int player){m_system->getManager<ActorManager>()->stopDown(player);}
+   void sendInput(std::function<void(Entity*)> func)
+   {
+      for(auto &comp : m_system->getComponentVector<PlayerControlledComponent>())
+         func(comp.parent);
+   }
+
+   void onLeftPress(){sendInput([&](Entity *e){m_system->getManager<ActorManager>()->moveLeft(e);});}
+   void onLeftRelease(){sendInput([&](Entity *e){m_system->getManager<ActorManager>()->stopLeft(e);});}
+   void onRightPress(){sendInput([&](Entity *e){m_system->getManager<ActorManager>()->moveRight(e);});}
+   void onRightRelease(){sendInput([&](Entity *e){m_system->getManager<ActorManager>()->stopRight(e);});}
+   void onUpPress(){sendInput([&](Entity *e){m_system->getManager<ActorManager>()->moveUp(e);});}
+   void onUpRelease(){sendInput([&](Entity *e){m_system->getManager<ActorManager>()->stopUp(e);});}
+   void onDownPress(){sendInput([&](Entity *e){m_system->getManager<ActorManager>()->moveDown(e);});}
+   void onDownRelease(){sendInput([&](Entity *e){m_system->getManager<ActorManager>()->stopDown(e);});}
 
    static void registerComponentCallbacks(Manager<InputManagerImpl, InputManager> &m)
    {

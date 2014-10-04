@@ -246,23 +246,22 @@ public:
    }
 
    template<typename Func>
-   void characterStateFunction(int player, Func && func)
+   void characterStateFunction(Entity *e, Func && func)
    {
-      if(auto e = getPlayer(player))
-         if(auto cc = e->get<TActorComponent>())
-            if(auto &sm = *cc->sm)
-               func(sm);
+      if(auto cc = e->get<TActorComponent>())
+         if(auto &sm = *cc->sm)
+            func(sm);
    }
 
-   void moveLeft(int player){characterStateFunction(player, [=](CharSM& sm){sm->moveLeft();});}
-   void moveRight(int player){characterStateFunction(player, [=](CharSM& sm){sm->moveRight();});}
-   void moveUp(int player){characterStateFunction(player, [=](CharSM& sm){sm->moveUp();});}
-   void moveDown(int player){characterStateFunction(player, [=](CharSM& sm){sm->moveDown();});}
+   void moveLeft(Entity *e){characterStateFunction(e, [=](CharSM& sm){sm->moveLeft();});}
+   void moveRight(Entity *e){characterStateFunction(e, [=](CharSM& sm){sm->moveRight();});}
+   void moveUp(Entity *e){characterStateFunction(e, [=](CharSM& sm){sm->moveUp();});}
+   void moveDown(Entity *e){characterStateFunction(e, [=](CharSM& sm){sm->moveDown();});}
 
-   void stopLeft(int player){characterStateFunction(player, [=](CharSM& sm){sm->stopLeft();});}
-   void stopRight(int player){characterStateFunction(player, [=](CharSM& sm){sm->stopRight();});}
-   void stopUp(int player){characterStateFunction(player, [=](CharSM& sm){sm->stopUp();});}
-   void stopDown(int player){characterStateFunction(player, [=](CharSM& sm){sm->stopDown();});}
+   void stopLeft(Entity *e){characterStateFunction(e, [=](CharSM& sm){sm->stopLeft();});}
+   void stopRight(Entity *e){characterStateFunction(e, [=](CharSM& sm){sm->stopRight();});}
+   void stopUp(Entity *e){characterStateFunction(e, [=](CharSM& sm){sm->stopUp();});}
+   void stopDown(Entity *e){characterStateFunction(e, [=](CharSM& sm){sm->stopDown();});}
 };
 
 std::unique_ptr<ActorManager> buildActorManager()

@@ -8,15 +8,15 @@ class ActorManager : public IManager
 public:
    virtual void update()=0;
 
-   virtual void moveLeft(int player)=0;
-   virtual void moveRight(int player)=0;
-   virtual void moveUp(int player)=0;
-   virtual void moveDown(int player)=0;
+   virtual void moveLeft(Entity *e)=0;
+   virtual void moveRight(Entity *e)=0;
+   virtual void moveUp(Entity *e)=0;
+   virtual void moveDown(Entity *e)=0;
 
-   virtual void stopLeft(int player)=0;
-   virtual void stopRight(int player)=0;
-   virtual void stopUp(int player)=0;
-   virtual void stopDown(int player)=0;
+   virtual void stopLeft(Entity *e)=0;
+   virtual void stopRight(Entity *e)=0;
+   virtual void stopUp(Entity *e)=0;
+   virtual void stopDown(Entity *e)=0;
 
 };
 

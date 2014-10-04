@@ -53,8 +53,6 @@ class WorldUIElementImpl : public CoreUI::WorldUIElement
    Rectf m_cameraBounds;
    RenderManager *m_renderManager;
 
-   bool m_dragging;
-   Float2 m_clickPoint;
    Rectf startingBounds, m_viewport;
    UIElementBounds m_bounds;
 public:
@@ -65,55 +63,10 @@ public:
 
       m_bounds.absolute = viewport;
       m_renderManager = rm;
-
-      registerMouseScroll(0, [&](MouseEvent e){onScroll((float)e.scrollX, (float)e.scrollY);});
-      registerMouseButton(Input::MouseLeft, Input::Press, 0, [&](MouseEvent e){onMouseDown((float)e.x, (float)e.y);});
-      registerMouseButton(Input::MouseLeft, Input::Release, 0, [&](MouseEvent e){onMouseUp((float)e.x, (float)e.y);});
-      registerMouseMove([&](MouseEvent e){onMouseMove((float)e.x, (float)e.y);});
-
-      m_dragging = false;
    }
 
    void onStep()
    {
-   }
-
-   void onMouseMove(float x, float y)
-   {
-      if(m_dragging)
-      {
-         m_cameraBounds = startingBounds;
-         m_cameraBounds.offset(Float2(-(x - m_clickPoint.x), -(y - m_clickPoint.y)));
-      }
-   }
-
-   void onMouseDown(float x, float y)
-   {
-      m_dragging = true;
-      m_clickPoint = Float2(x, y);
-      startingBounds = m_cameraBounds;
-   }
-
-   void onMouseUp(float x, float y)
-   {
-      m_dragging = false;
-   }
-
-   void onScroll(float x, float y)
-   {
-      float sc = y * 100.0f;
-      auto w = m_cameraBounds.width();
-      auto h = m_cameraBounds.height();
-
-      float r = std::min((w + sc) / w, (h + sc) / h);
-
-      auto dw = w * r - w;
-      auto dh = h * r - h;
-
-      if(w - dw > 0 && h - dh > 0)
-      {
-         m_cameraBounds.inset(Float2(dw/2, dh/2));
-      }
    }
 
    void buildProportionalViewport()

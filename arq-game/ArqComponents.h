@@ -12,6 +12,13 @@ struct VelocityComponent : public Component
    VelocityComponent(Float2 maxVelocity):maxVelocity(maxVelocity){}
 };
 
+struct TargetComponent : public Component
+{
+   Entity *target;
+   TargetComponent(Entity *target):target(target){}
+   TargetComponent():target(nullptr){}
+};
+
 struct ActorComponent : public Component
 {
    int playerNumber;

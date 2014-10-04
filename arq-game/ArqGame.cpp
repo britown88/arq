@@ -22,6 +22,7 @@
 #include "ActorManager.h"
 #include "RenderManager.h"
 #include "PartitionManager.h"
+#include "CameraManager.h"
 
 #include "GridEditor.h"
 #include "GridManager.h"
@@ -74,9 +75,8 @@ class ArqGame : public Tool
       for(int i = 0; i <= 5; ++i) buildBlock(Recti(10+i, 11, 11+i, 12));
       for(int i = 0; i <= 5; ++i) buildBlock(Recti(7+i, 15, 8+i, 16));
       for(int i = 0; i <= 5; ++i) buildBlock(Recti(15+i, 18, 16+i, 19));
-      
 
-      for(int i = 0; i < 3; ++i)
+      for(int i = 0; i < 1; ++i)
       {
          float size = 50.0f;
          auto e = m_system.createEntity();
@@ -87,6 +87,7 @@ class ArqGame : public Tool
          e->add(MeshComponent(ibo, vbo, Colorf(1, 1, 1)));
          e->add(RotationComponent(0.0f, Float2(size/2.0f, size/2.0f)));
          e->add(TextureComponent());
+         e->add(PlayerControlledComponent());
 
          e->add(VelocityComponent(Float2(50.0f, 50.0f)));
 
@@ -106,9 +107,17 @@ class ArqGame : public Tool
          m_entities.push_back(e);
          
       }
-
-      
    }
+
+   void buildTotallySweetCamera()
+   {
+      auto e = m_system.createEntity();
+      e->add(CameraComponent());
+      e->add(GraphicalBoundsComponent(Float2(455, 256)));
+      e->add(TargetComponent(m_entities[0]));
+      e->setNew();
+   }
+
    void buildBackground()
    {
       //bg
@@ -186,10 +195,13 @@ public:
       m_system.getManager<GridManager>()->createGrid(Float2(), Int2(200, 100), Float2(32.0f, 32.0f));
 
       buildTestEntities();
+      buildTotallySweetCamera();
 
       m_worldElement = getDlgElement()->intern<CoreUI::WorldUIElement>(CoreUI::buildWorldUIElement(Rectf(), m_system.getManager<RenderManager>()));
       m_worldElement->cameraBounds() = Rectf(0, 0, 455, 256);
       m_worldElement->anchorToParent();
+
+      m_system.addManager(buildCameraManager(m_worldElement));
 
       getDlgElement()->intern(createGridEditor(m_worldElement, &m_system));
 
@@ -203,6 +215,7 @@ public:
       m_system.getManager<ActorManager>()->update();
       m_system.getManager<GridManager>()->updateGridCollisions();  
       m_system.getManager<PhysicsManager>()->update();
+      m_system.getManager<CameraManager>()->update();
           
    }
 
