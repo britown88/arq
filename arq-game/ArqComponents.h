@@ -21,8 +21,6 @@ struct TargetComponent : public Component
 
 struct ActorComponent : public Component
 {
-   int playerNumber;
-
    InternString   upIdleSprite, 
                   downIdleSprite, 
                   leftIdleSprite, 
@@ -32,8 +30,7 @@ struct ActorComponent : public Component
                   leftRunSprite,
                   rightRunSprite;
 
-   ActorComponent():playerNumber(playerNumber), 
-                     upIdleSprite(nullptr),  
+   ActorComponent(): upIdleSprite(nullptr),  
                      downIdleSprite(nullptr),  
                      leftIdleSprite(nullptr),  
                      rightIdleSprite(nullptr),  

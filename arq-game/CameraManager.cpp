@@ -4,6 +4,7 @@
 #include "engine\IOCContainer.h"
 #include "engine\Application.h"
 #include "engine\CoreComponents.h"
+#include "GridManager.h"
 
 REGISTER_COMPONENT(CameraComponent);
 REGISTER_COMPONENT(TargetComponent);
@@ -29,15 +30,37 @@ public:
          if(auto gbc = c->get<GraphicalBoundsComponent>())
             size = gbc->size;
 
+         Rectf cam(0, 0, size.x, size.y);
+
          if(auto tc = c->get<TargetComponent>())
-         if(auto te = tc->target)
-         if(auto tpos = te->get<PositionComponent>())
          {
-            Rectf cam(0, 0, size.x, size.y);
-            cam.offset(tpos->pos);
-            cam.offset(-size.x/2, -size.y/2);
-            m_world->cameraBounds() = cam;
+            if(auto te = tc->target)
+            if(auto tpos = te->get<PositionComponent>())
+            {
+               cam.offset(tpos->pos);
+
+               if(auto cc = c->get<CenterComponent>())
+                  cam.offset(-cc->center.x, -cc->center.y);
+            }
          }
+         else
+         {
+
+         }
+         if(auto grid = m_system->getManager<GridManager>())
+         {
+            auto world = grid->getGridRect();
+
+            if(cam.left < world.left) cam.offset(world.left - cam.left, 0.0f);
+            if(cam.right > world.right) cam.offset(-(cam.right - world.right), 0.0f);
+            if(cam.top < world.top) cam.offset(0.0f, world.top - cam.top);
+            if(cam.bottom > world.bottom) cam.offset(0.0f, -(cam.bottom - world.bottom));
+
+
+         }
+
+                  
+         m_world->cameraBounds() = cam;
       }
    }
 

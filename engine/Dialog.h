@@ -14,4 +14,5 @@ public:
    void open(UIElement *parent);
    void close();
    UIElement *element();
+   UIElement *outerElement();
 };

@@ -167,13 +167,13 @@ public:
             return false; 
 
          //bottom Y
-/*         auto y1 = ComponentHelpers::getBottomY(e1.e);
-         auto y2 = ComponentHelpers::getBottomY(e2.e);
+         auto y1 = ComponentHelpers::getEntityRect(e1.e).bottom;
+         auto y2 = ComponentHelpers::getEntityRect(e2.e).bottom;
 
          if(y1 < y2)
             return true;
          if(y1 > y2)
-            return false;   */        
+            return false;           
 
          return e1.e < e2.e;
       });

@@ -40,6 +40,11 @@ UIElement *Tool::getDlgElement()
    return m_dlg ? m_dlg->element() : nullptr;
 }
 
+UIElement *Tool::getOuterElement()
+{
+   return m_dlg ? m_dlg->outerElement() : nullptr;
+}
+
 void Tool::close()
 {
    onClose();

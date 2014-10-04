@@ -109,6 +109,15 @@ public:
       m_grid.resize(size.x * size.y, nullptr);
    }
 
+   Rectf getGridRect()
+   {
+      return Rectf(  origin.x, 
+                     origin.y, 
+                     origin.x + (gridDims.x * cellSize.x), 
+                     origin.y + (gridDims.y * cellSize.y));
+      
+   }
+
    Int2 gridPosition(Float2 worldPos)
    {
       return Int2((worldPos.x - origin.x) * invCellSize.x, (worldPos.y - origin.y) * invCellSize.y);

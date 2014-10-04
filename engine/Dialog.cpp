@@ -115,6 +115,7 @@ public:
       m_dlg->getParent()->arrange();
    }
    UIElement *element(){return m_innerPanel;}
+   UIElement *outerElement(){return m_dlg.get();}
 };
 
 
@@ -124,4 +125,5 @@ Dialog::~Dialog(){}
 void Dialog::open(UIElement *parent){pImpl->open(parent);}
 void Dialog::close(){pImpl->close();}
 UIElement *Dialog::element(){return pImpl->element();}
+UIElement *Dialog::outerElement(){return pImpl->outerElement();}
 void Dialog::setMaximized(bool maximized){pImpl->setMaximized(maximized);}

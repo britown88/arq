@@ -76,61 +76,65 @@ class ArqGame : public Tool
       for(int i = 0; i <= 5; ++i) buildBlock(Recti(7+i, 15, 8+i, 16));
       for(int i = 0; i <= 5; ++i) buildBlock(Recti(15+i, 18, 16+i, 19));
 
-      for(int i = 0; i < 1; ++i)
+      
+      float size = 50.0f;
+      auto e = m_system.createEntity();
+      e->add(PositionComponent(Float2(1000, 500)));
+      e->add(GraphicalBoundsComponent(Float2(size, size)));
+      e->add(CenterComponent(Float2(size/2.0f, size/2.0f)));
+      //e->add(CollisionBoxComponent(0, 0, size, size));
+      e->add(CollisionBoxComponent(12, 14, 26, 31));
+      e->add(MeshComponent(ibo, vbo, Colorf(1, 1, 1)));
+      e->add(RotationComponent(0.0f, Float2(size/2.0f, size/2.0f)));
+      e->add(TextureComponent());
+      e->add(PlayerControlledComponent());
+
+      e->add(VelocityComponent(Float2(50.0f, 50.0f)));
+
+      auto iter = m_characterTemplates.find("shumpfguy");
+      if(iter != m_characterTemplates.end())
       {
-         float size = 50.0f;
-         auto e = m_system.createEntity();
-         e->add(PositionComponent(Float2(100 * (i+1), 0)));
-         e->add(GraphicalBoundsComponent(Float2(size, size)));
-         //e->add(CollisionBoxComponent(0, 0, size, size));
-         e->add(CollisionBoxComponent(12, 14, 26, 31));
-         e->add(MeshComponent(ibo, vbo, Colorf(1, 1, 1)));
-         e->add(RotationComponent(0.0f, Float2(size/2.0f, size/2.0f)));
-         e->add(TextureComponent());
-         e->add(PlayerControlledComponent());
+         ActorComponent cc = iter->second;
 
-         e->add(VelocityComponent(Float2(50.0f, 50.0f)));
-
-         auto iter = m_characterTemplates.find("shumpfguy");
-         if(iter != m_characterTemplates.end())
-         {
-            ActorComponent cc = iter->second;
-            cc.playerNumber = i;
-
-            e->add(SpriteComponent(cc.downRunSprite));
-            e->add(cc);
-         }
-
-         //e->lock<VelocityComponent>()->velocity.x = 10.0f;
-
-         e->setNew();
-         m_entities.push_back(e);
-         
+         e->add(SpriteComponent(cc.downRunSprite));
+         e->add(cc);
       }
+
+      //e->lock<VelocityComponent>()->velocity.x = 10.0f;
+
+      e->setNew();
+      m_entities.push_back(e);
+
    }
 
    void buildTotallySweetCamera()
    {
+      Float2 size(512.0f, 288.0f);
       auto e = m_system.createEntity();
       e->add(CameraComponent());
-      e->add(GraphicalBoundsComponent(Float2(455, 256)));
+      e->add(GraphicalBoundsComponent(size));
+      e->add(CenterComponent(size * 0.5f));
       e->add(TargetComponent(m_entities[0]));
       e->setNew();
    }
 
    void buildBackground()
    {
+      auto vbo = GameHelpers::standardRectangleVBO();
+      auto ibo = GameHelpers::standardRectangleIBO();
+      auto st = IOC.resolve<StringTable>();
+
       //bg
-      //auto bg = m_system.createEntity();
-      //bg->add(PositionComponent(Float2()));
-      //bg->add(GraphicalBoundsComponent(Float2(2000, 2000)));
-      //bg->add(MeshComponent(ibo, vbo, Colorf(1, 1, 1)));
-      //bg->add(LayerComponent(-1));
-      //TextureComponent bgTex(st->get("assets/img/sand.png"));
-      //bgTex.repeatType = RepeatType::Repeat;
-      //bgTex.size = Float2(450, 450);
-      //bg->add(bgTex);
-      //bg->setNew();
+      auto bg = m_system.createEntity();
+      bg->add(PositionComponent(Float2()));
+      bg->add(GraphicalBoundsComponent(Float2(1600, 1600)));
+      bg->add(MeshComponent(ibo, vbo, Colorf(1, 1, 1)));
+      bg->add(LayerComponent(-1));
+      TextureComponent bgTex(st->get("assets/img/sand.png"));
+      bgTex.repeatType = RepeatType::Repeat;
+      bgTex.size = Float2(150, 150);
+      bg->add(bgTex);
+      bg->setNew();
    }
 
    void initManagers()
@@ -192,8 +196,9 @@ public:
       initManagers();   
       initDataManager();
 
-      m_system.getManager<GridManager>()->createGrid(Float2(), Int2(200, 100), Float2(32.0f, 32.0f));
+      m_system.getManager<GridManager>()->createGrid(Float2(), Int2(50, 50), Float2(32.0f, 32.0f));
 
+      buildBackground();
       buildTestEntities();
       buildTotallySweetCamera();
 

@@ -164,11 +164,9 @@ void characterUpdateGroundSprite(Entity *e)
 
 class ActorManagerImpl : public Manager<ActorManagerImpl, ActorManager>
 {
-   std::vector<Entity*> m_players;
 public:
    ActorManagerImpl()
    {
-      m_players.resize(GameData::PlayerCount, nullptr);
    }
 
    static void registerComponentCallbacks(Manager<ActorManagerImpl, ActorManager> &m)
@@ -178,29 +176,17 @@ public:
    void onNew(Entity *e)
    {
       if(auto cc = e->get<ActorComponent>())
-         if(cc->playerNumber < GameData::PlayerCount)
-         {
-            m_players[cc->playerNumber] = cc->parent;
-            m_players[cc->playerNumber]->add(TActorComponent());
-            m_players[cc->playerNumber]->get<TActorComponent>()->sm->set(buildGroundState(m_players[cc->playerNumber]));
-         } 
+      {
+         auto tact = TActorComponent();
+         tact.sm->set(buildGroundState(cc->parent));
+
+         cc->parent->add(tact);
+      }
    }
    void onDelete(Entity *e)
    {
       if(auto cc = e->get<ActorComponent>())
-         if(cc->playerNumber < GameData::PlayerCount && m_players[cc->playerNumber] == cc->parent)
-         {
-            m_players[cc->playerNumber]->remove<TActorComponent>();
-            m_players[cc->playerNumber] = nullptr;
-         }
-            
-   }
-   Entity *getPlayer(int playerNumber)
-   {
-      if(playerNumber >= 0 && playerNumber < GameData::PlayerCount)
-         return m_players[playerNumber];
-
-      return nullptr;
+         e->remove<TActorComponent>();            
    }
 
    ActorState *buildGroundState(Entity *e)

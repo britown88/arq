@@ -29,5 +29,6 @@ public:
    void setMaximized(bool set);
   
    UIElement *getDlgElement();
+   UIElement *getOuterElement();
 
 };

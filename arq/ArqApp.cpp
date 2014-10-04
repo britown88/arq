@@ -17,7 +17,8 @@ public:
 
    Int2 getDefaultWindowSize()
    {
-      return Int2(1600, 900);
+      return Int2(1024, 576);
+      //return Int2(1600, 900);
       //return Int2(1920, 1080);
    }
 
@@ -47,15 +48,26 @@ public:
    
    void onAppStart()
    {
+      float logcatwidth = getDefaultWindowSize().x * 0.25f;
+
       buildSplashBG();
 
       m_arqGame = createArqGame();
       m_arqGame->open(&getUIRoot());
+
       m_arqGame->setMaximized(true);
+      auto elem = m_arqGame->getOuterElement();      
+      elem->setOptionAnchors(0.0f, 0.0f, logcatwidth, 0.0f);
+      
       giveFocus(m_arqGame->getDlgElement());
 
       m_logBadger = createLogBadger();
       m_logBadger->open(&getUIRoot());
+
+      elem = m_logBadger->getOuterElement();
+      elem->anchorToParentHeight();
+      elem->setOption(UIOption::Right, 0.0f);
+      elem->setOption(UIOption::Width, logcatwidth);
 
       getUIRoot().arrange(); 
       getUIRoot().registerKeyboardKey(Input::KeyEscape, Input::Release, 0, [&](KeyEvent e){shutdown();});

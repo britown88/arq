@@ -20,6 +20,9 @@ public:
 
    virtual Entity *entityAt(Int2 pos)=0;
    virtual Int2 gridPosition(Float2 worldPos)=0;
+   
+   //return a rect containing the entire grid in world coords
+   virtual Rectf getGridRect()=0;
 
    virtual void updateGridCollisions()=0;
 
