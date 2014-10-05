@@ -1,4 +1,4 @@
-#include "InputManager.h"
+#include "ArqManagers.h"
 #include "engine\Component.h"
 #include "ArqComponents.h"
 #include "GameData.h"
@@ -8,6 +8,7 @@
 #include "engine\KeyEvent.h"
 #include "engine\IOCContainer.h"
 #include "engine\Application.h"
+#include "GameData.h"
 
 REGISTER_COMPONENT(PlayerControlledComponent);
 
@@ -51,6 +52,11 @@ public:
       //m_element->registerKeyboardKey(Input::KeySpace, Input::Press, 0, APress);
       //m_element->registerKeyboardKey(Input::KeySpace, Input::Release, 0, ARelease);
 
+      m_element->registerMouseButton(Input::MouseLeft, Input::Press, 0, [=](MouseEvent e){onLeftMousePress((float)e.x, (float)e.y);});
+      m_element->registerMouseButton(Input::MouseLeft, Input::Release, 0, [=](MouseEvent e){onLeftMouseRelease((float)e.x, (float)e.y);});
+      m_element->registerMouseButton(Input::MouseRight, Input::Press, 0, [=](MouseEvent e){onRightMousePress((float)e.x, (float)e.y);});
+      m_element->registerMouseButton(Input::MouseRight, Input::Release, 0, [=](MouseEvent e){onRightMouseRelease((float)e.x, (float)e.y);});
+
    }
 
    void unregisterKeyboard()
@@ -65,6 +71,11 @@ public:
       m_element->unregisterKeyboardKey(Input::KeyW, Input::Release, 0);
       m_element->unregisterKeyboardKey(Input::KeyS, Input::Press, 0);
       m_element->unregisterKeyboardKey(Input::KeyS, Input::Release, 0);
+
+      m_element->unregisterMouseButton(Input::MouseLeft, Input::Press, 0);
+      m_element->unregisterMouseButton(Input::MouseLeft, Input::Release, 0);
+      m_element->unregisterMouseButton(Input::MouseRight, Input::Press, 0);
+      m_element->unregisterMouseButton(Input::MouseRight, Input::Release, 0);
    }
 
    void sendInput(std::function<void(Entity*)> func)
@@ -81,6 +92,22 @@ public:
    void onUpRelease(){sendInput([&](Entity *e){m_system->getManager<ActorManager>()->stopUp(e);});}
    void onDownPress(){sendInput([&](Entity *e){m_system->getManager<ActorManager>()->moveDown(e);});}
    void onDownRelease(){sendInput([&](Entity *e){m_system->getManager<ActorManager>()->stopDown(e);});}
+
+   void sendActionInput(ActionType type, bool execute, Float2 target)
+   {
+      for(auto &comp : m_system->getComponentVector<PlayerControlledComponent>())
+      {
+         if(execute)
+            m_system->getManager<ActorManager>()->executeAction(comp.parent, type, m_element->vp2world(target));
+         else
+            m_system->getManager<ActorManager>()->endAction(comp.parent, type, m_element->vp2world(target));
+      } 
+   }
+
+   void onLeftMousePress(float x, float y){sendActionInput(ActionType::MainHand, true, Float2(x, y));}
+   void onLeftMouseRelease(float x, float y){sendActionInput(ActionType::MainHand, false, Float2(x, y));}
+   void onRightMousePress(float x, float y){sendActionInput(ActionType::OffHand, true, Float2(x, y));}
+   void onRightMouseRelease(float x, float y){sendActionInput(ActionType::OffHand, false, Float2(x, y));}
 
    static void registerComponentCallbacks(Manager<InputManagerImpl, InputManager> &m)
    {

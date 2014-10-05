@@ -1,4 +1,5 @@
 data
+data actions.dat
 data characters.dat
 data sprites.dat
 fonts
@@ -6,9 +7,12 @@ fonts arial.ttf
 fonts comic.ttf
 fonts consola.ttf
 fonts pressstart.ttf
+fonts retganon.ttf
 img
 img block.png
+img sand.png
 img splash.png
+img zeldasand.png
 img lights
 img lights round25.png
 img lights round50.png

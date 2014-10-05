@@ -24,6 +24,4 @@ public:
 
 };
 
-
-
 std::unique_ptr<ActorManager> buildActorManager();

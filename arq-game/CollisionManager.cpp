@@ -1,4 +1,4 @@
-#include "CollisionManager.h"
+#include "ArqManagers.h"
 #include "engine\Component.h"
 #include "ArqComponents.h"
 

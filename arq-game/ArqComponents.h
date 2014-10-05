@@ -19,6 +19,13 @@ struct TargetComponent : public Component
    TargetComponent():target(nullptr){}
 };
 
+struct AttackComponent : public Component
+{
+
+};
+
+struct PlayerControlledComponent : public Component{};
+
 struct ActorComponent : public Component
 {
    InternString   upIdleSprite, 
@@ -33,7 +40,20 @@ struct ActorComponent : public Component
    InternString   mainHandAction,
                   offHandAction;
 
-   ActorComponent(){memset(this, 0, sizeof(*this));}
+   bool lockFacing, lockMovement;
+
+   ActorComponent():
+                  upIdleSprite(nullptr),
+                  downIdleSprite(nullptr),
+                  leftIdleSprite(nullptr),
+                  rightIdleSprite(nullptr),
+                  upRunSprite(nullptr),
+                  downRunSprite(nullptr),
+                  leftRunSprite(nullptr),
+                  rightRunSprite(nullptr),
+                  mainHandAction(nullptr),
+                  offHandAction(nullptr),
+                  lockFacing(false), lockMovement(false){}
 };
 
 

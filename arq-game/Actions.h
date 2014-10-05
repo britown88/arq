@@ -10,11 +10,11 @@ class IAction
 public:
    virtual ~IAction(){}
    
-   virtual void execute(Entity *e, ActionType type, Float2 target)=0;
-   virtual void end(Entity *e, ActionType type, Float2 target)=0;
+   virtual void execute(Entity *e, Float2 target)=0;
+   virtual void end(Entity *e, Float2 target)=0;
 };
 
 namespace Actions
 {
-   std::unique_ptr<IAction> buildMeleeWeaponAction(Property &p);
+   std::unique_ptr<IAction> buildMeleeAction();
 };

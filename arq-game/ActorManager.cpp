@@ -217,6 +217,40 @@ public:
          virtual void stopRight(){characterStop(e, TActorComponent::MovementType::Right);}
          virtual void stopUp(){characterStop(e, TActorComponent::MovementType::Up);}
          virtual void stopDown(){characterStop(e, TActorComponent::MovementType::Down);}
+
+         virtual void executeAction(Entity *e, ActionType type, Float2 target)
+         {
+            if(auto ac = e->get<ActorComponent>())
+            {
+               if(type == ActionType::MainHand && ac->mainHandAction)
+               {
+
+               }
+               else if(type == ActionType::OffHand && ac->offHandAction)
+               {
+
+               }
+            }
+         }
+         virtual void endAction(Entity *e, ActionType type, Float2 target)
+         {
+            if(auto ac = e->get<ActorComponent>())
+            {
+               auto &actList = IOC.resolve<GameData>()->actions;
+               if(type == ActionType::MainHand && ac->mainHandAction)
+               {
+                  auto iter = actList.find(ac->mainHandAction);
+                  if(iter != actList.end())
+                     iter->second->execute(e, target);
+               }
+               else if(type == ActionType::OffHand && ac->offHandAction)
+               {
+                  auto iter = actList.find(ac->offHandAction);
+                  if(iter != actList.end())
+                     iter->second->execute(e, target);
+               }
+            }
+         }
       };
 
       return new GroundState(this, m_system, e);

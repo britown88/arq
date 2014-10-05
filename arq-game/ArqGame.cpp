@@ -17,15 +17,14 @@
 #include "engine\Logs.h"
 
 #include "ArqComponents.h"
-#include "PhysicsManager.h"
-#include "InputManager.h"
+#include "ArqManagers.h"
 #include "ActorManager.h"
-#include "RenderManager.h"
 #include "PartitionManager.h"
 #include "CameraManager.h"
 
 #include "GridEditor.h"
 #include "GridManager.h"
+#include "Actions.h"
 
 #include <unordered_map>
 
@@ -100,6 +99,8 @@ class ArqGame : public Tool
          e->add(cc);
       }
 
+      e->lock<ActorComponent>()->mainHandAction = st->get("sword");
+
       //e->lock<VelocityComponent>()->velocity.x = 10.0f;
 
       e->setNew();
@@ -151,6 +152,10 @@ class ArqGame : public Tool
 
    void initDataManager()
    {
+      IOC.add(std::unique_ptr<GameData>(new GameData()));
+
+      
+
       auto dm = IOC.resolve<DataManager>();
       dm->registerDataTypeLoader("sprite", [&](Property &p)
       {
@@ -160,6 +165,20 @@ class ArqGame : public Tool
             IOC.resolve<SpriteManager>()->addSprite(*name, std::move(anim));            
          }
 
+      });
+
+      dm->registerDataTypeLoader("action", [&](Property &p)
+      {
+         auto st = IOC.resolve<StringTable>();
+
+         if(auto name = p["name"].get<std::string>())
+         if(auto type = p["actiontype"].get<std::string>())
+         {
+            if(*type == "melee")
+            {
+               IOC.resolve<GameData>()->actions.insert(std::make_pair(st->get(*name), Actions::buildMeleeAction()));
+            }        
+         }
       });
 
       dm->registerDataTypeLoader("character", [&](Property&p)

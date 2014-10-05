@@ -74,16 +74,13 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ActorManager.h" />
+    <ClInclude Include="ArqManagers.h" />
     <ClInclude Include="CameraManager.h" />
     <ClInclude Include="GameData.h" />
     <ClInclude Include="GridEditor.h" />
     <ClInclude Include="GridManager.h" />
     <ClInclude Include="Actions.h" />
-    <ClInclude Include="InputManager.h" />
     <ClInclude Include="PartitionManager.h" />
-    <ClInclude Include="CollisionManager.h" />
-    <ClInclude Include="PhysicsManager.h" />
-    <ClInclude Include="RenderManager.h" />
     <ClInclude Include="ArqComponents.h" />
     <ClInclude Include="ArqGame.h" />
   </ItemGroup>

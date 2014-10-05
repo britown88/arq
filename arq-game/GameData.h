@@ -1,5 +1,11 @@
 #pragma once
 
+#include <unordered_map>
+#include "engine\StringTable.h"
+#include <memory>
+#include "Actions.h"
+
+
 enum class Direction : unsigned int
 {
    Up = 0,
@@ -14,7 +20,10 @@ enum class ActionType : unsigned int
    OffHand
 };
 
-namespace GameData
+class IAction;
+
+class GameData
 {
-   
+public:
+   std::unordered_map<InternString, std::unique_ptr<IAction>> actions;
 };

@@ -1,21 +1,20 @@
 #include "Actions.h"
 
-class MeleeWeapon : public IAction
+class Melee : public IAction
 {
 public:
-   void execute(Entity *e, ActionType type, Float2 target)
+   void execute(Entity *e, Float2 target)
    {
-
    }
 
-   void end(Entity *e, ActionType type, Float2 target)
+   void end(Entity *e, Float2 target)
    {
 
    }
 };
 
-std::unique_ptr<IAction> buildMeleeWeaponAction(Property &p)
+std::unique_ptr<IAction> Actions::buildMeleeAction()
 {
-   return std::unique_ptr<IAction>(new MeleeWeapon());
+   return std::unique_ptr<IAction>(new Melee());
 }
 
