@@ -19,9 +19,13 @@ public:
    virtual void stopUp(Entity *e)=0;
    virtual void stopDown(Entity *e)=0;
 
+   virtual void stun(Entity *e)=0;
+   virtual void unstun(Entity *e)=0;
+
    virtual void executeAction(Entity *e, ActionType type, Float2 target)=0;
    virtual void endAction(Entity *e, ActionType type, Float2 target)=0;
 
+   virtual void face(Entity *e, Direction dir)=0;
 };
 
 std::unique_ptr<ActorManager> buildActorManager();

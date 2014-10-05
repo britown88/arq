@@ -42,6 +42,11 @@ public:
    virtual void stopUp(){}
    virtual void stopDown(){}
 
+   virtual void stun(){}
+   virtual void unstun(){}
+
+   virtual void face(Direction dir){}
+
    virtual void executeAction(Entity *e, ActionType type, Float2 target){}
    virtual void endAction(Entity *e, ActionType type, Float2 target){}
 };
@@ -91,26 +96,19 @@ void characterSetState(Entity *e, ActorState *state)
    if(auto cc = e->get<TActorComponent>())
       cc->sm->set(state);
 }
-//returns whether offset succeeded
-bool characterOffsetPosition(Entity *e, EntitySystem *system, float x, float y)
+
+void characterPushState(Entity *e, ActorState *state)
 {
-   auto ebox = ComponentHelpers::getCollisionBox(e);
-   ebox.offset(Float2(x, y));
-
-   auto gridCollisions = system->getManager<GridManager>()->collisionAt(ebox);
-   if(gridCollisions.empty())
-   {
-      if(auto pc = e->lock<PositionComponent>())
-      {
-         pc->pos.x += x;
-         pc->pos.y += y;
-      }
-
-      return true;
-   }
-
-   return false;
+   if(auto cc = e->get<TActorComponent>())
+      cc->sm->push(state);
 }
+
+void characterPopState(Entity *e)
+{
+   if(auto cc = e->get<TActorComponent>())
+      cc->sm->pop();
+}
+
 void characterUpdateGroundMovement(Entity *e)
 {
    float dt = IOC.resolve<Application>()->dt();
@@ -163,6 +161,61 @@ void characterUpdateGroundSprite(Entity *e)
    }
 }
 
+void characterFace(Entity *e, Direction dir)
+{
+   if(auto cc = e->get<ActorComponent>())
+   if(auto sc = e->lock<SpriteComponent>())
+   {
+      switch (dir)
+      {
+      case Direction::Up:
+         if(sc->sprite != cc->upRunSprite) sc->sprite = cc->upRunSprite;
+         break;
+      case Direction::Down:
+         if(sc->sprite != cc->downRunSprite) sc->sprite = cc->downRunSprite;
+         break;
+      case Direction::Left:
+         if(sc->sprite != cc->leftRunSprite) sc->sprite = cc->leftRunSprite;
+         break;
+      case Direction::Right:
+         if(sc->sprite != cc->rightRunSprite) sc->sprite = cc->rightRunSprite;
+         break;
+      default:
+         break;
+      }
+   }
+}
+
+void characterAction(Entity *e, ActionType type, Float2 target, bool execute)
+{
+   if(auto ac = e->get<ActorComponent>())
+   {
+      auto &actList = IOC.resolve<GameData>()->actions;
+      if(type == ActionType::MainHand && ac->mainHandAction)
+      {
+         auto iter = actList.find(ac->mainHandAction);
+         if(iter != actList.end())
+         {
+            if(execute)
+               iter->second->execute(e, target);
+            else
+               iter->second->end(e, target);
+         }
+      }
+      else if(type == ActionType::OffHand && ac->offHandAction)
+      {
+         auto iter = actList.find(ac->offHandAction);
+         if(iter != actList.end())
+         {
+            if(execute)
+               iter->second->execute(e, target);
+            else
+               iter->second->end(e, target);
+         }
+      }
+   }
+}
+
 #pragma endregion
 
 class ActorManagerImpl : public Manager<ActorManagerImpl, ActorManager>
@@ -192,6 +245,37 @@ public:
          e->remove<TActorComponent>();            
    }
 
+   ActorState *buildStunnedState(Entity *e)
+   {
+      class StunnedState : public ActorState
+      {
+         ActorManagerImpl *m_manager;
+      public:
+         StunnedState(ActorManagerImpl *manager, EntitySystem *system, Entity *e)
+            :m_manager(manager), ActorState(system, e){}
+
+         virtual void update()
+         {  
+            //characterUpdateGroundMovement(e);
+            //characterUpdateGroundSprite(e);
+         }
+
+         virtual void moveLeft(){characterMove(e, TActorComponent::MovementType::Left);}
+         virtual void moveRight(){characterMove(e, TActorComponent::MovementType::Right);}
+         virtual void moveUp(){characterMove(e, TActorComponent::MovementType::Up);}
+         virtual void moveDown(){characterMove(e, TActorComponent::MovementType::Down);}
+
+         virtual void stopLeft(){characterStop(e, TActorComponent::MovementType::Left);}
+         virtual void stopRight(){characterStop(e, TActorComponent::MovementType::Right);}
+         virtual void stopUp(){characterStop(e, TActorComponent::MovementType::Up);}
+         virtual void stopDown(){characterStop(e, TActorComponent::MovementType::Down);}
+
+         virtual void unstun(){characterPopState(e);}
+      };
+
+      return new StunnedState(this, m_system, e);
+   }
+
    ActorState *buildGroundState(Entity *e)
    {
       class GroundState : public ActorState
@@ -202,8 +286,7 @@ public:
             :m_manager(manager), ActorState(system, e){}
 
          virtual void update()
-         {          
-            
+         {  
             characterUpdateGroundMovement(e);
             characterUpdateGroundSprite(e);
          }
@@ -218,38 +301,15 @@ public:
          virtual void stopUp(){characterStop(e, TActorComponent::MovementType::Up);}
          virtual void stopDown(){characterStop(e, TActorComponent::MovementType::Down);}
 
+         virtual void stun(){characterPushState(e, m_manager->buildStunnedState(e));}
+
          virtual void executeAction(Entity *e, ActionType type, Float2 target)
          {
-            if(auto ac = e->get<ActorComponent>())
-            {
-               if(type == ActionType::MainHand && ac->mainHandAction)
-               {
-
-               }
-               else if(type == ActionType::OffHand && ac->offHandAction)
-               {
-
-               }
-            }
+            characterAction(e, type, target, true);
          }
          virtual void endAction(Entity *e, ActionType type, Float2 target)
          {
-            if(auto ac = e->get<ActorComponent>())
-            {
-               auto &actList = IOC.resolve<GameData>()->actions;
-               if(type == ActionType::MainHand && ac->mainHandAction)
-               {
-                  auto iter = actList.find(ac->mainHandAction);
-                  if(iter != actList.end())
-                     iter->second->execute(e, target);
-               }
-               else if(type == ActionType::OffHand && ac->offHandAction)
-               {
-                  auto iter = actList.find(ac->offHandAction);
-                  if(iter != actList.end())
-                     iter->second->execute(e, target);
-               }
-            }
+            characterAction(e, type, target, false);
          }
       };
 
@@ -286,8 +346,13 @@ public:
    void stopUp(Entity *e){characterStateFunction(e, [=](CharSM& sm){sm->stopUp();});}
    void stopDown(Entity *e){characterStateFunction(e, [=](CharSM& sm){sm->stopDown();});}
 
+   void stun(Entity *e){characterStateFunction(e, [=](CharSM& sm){sm->stun();});}
+   void unstun(Entity *e){characterStateFunction(e, [=](CharSM& sm){sm->unstun();});}
+
    void executeAction(Entity *e, ActionType type, Float2 target){characterStateFunction(e, [=](CharSM& sm){sm->executeAction(e, type, target);});}
    void endAction(Entity *e, ActionType type, Float2 target){characterStateFunction(e, [=](CharSM& sm){sm->endAction(e, type, target);});}
+
+   void face(Entity *e, Direction dir){characterFace(e, dir);}
 };
 
 std::unique_ptr<ActorManager> buildActorManager()

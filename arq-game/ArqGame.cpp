@@ -145,6 +145,8 @@ class ArqGame : public Tool
       m_system.addManager(buildCollisionPartitionManager());
       m_system.addManager(buildMatrixManager());
       m_system.addManager(buildPhysicsManager());
+      m_system.addManager(buildAttackManager());
+      m_system.addManager(buildTimedLifeManager());
       
       m_system.addManager(buildActorManager());
       m_system.addManager(buildGridManager());
@@ -239,9 +241,11 @@ public:
 
    void onStep()
    {
-      m_system.getManager<ActorManager>()->update();
+      m_system.getManager<TimedLifeManager>()->update();
+      m_system.getManager<ActorManager>()->update();      
       m_system.getManager<GridManager>()->updateGridCollisions();  
       m_system.getManager<PhysicsManager>()->update();
+      m_system.getManager<AttackManager>()->update();
       m_system.getManager<CameraManager>()->update();
           
    }

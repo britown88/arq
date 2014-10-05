@@ -25,6 +25,7 @@ struct CollisionBoxComponent : public Component
 {
    Rectf aabb;
    CollisionBoxComponent(){}
+   CollisionBoxComponent(Rectf aabb):aabb(aabb){}
    CollisionBoxComponent(float x, float y, float width, float height)
    {
       aabb.left = x;

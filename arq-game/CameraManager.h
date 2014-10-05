@@ -2,7 +2,7 @@
 
 #include "engine\Entity.h"
 #include "engine\Component.h"
-#include  "engine\CoreUI.h"{
+#include  "engine\CoreUI.h"
 
 struct CameraComponent : public Component{};
 

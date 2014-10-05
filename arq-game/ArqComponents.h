@@ -4,6 +4,8 @@
 #include "engine\Vector.h"
 #include "engine\StringTable.h"
 
+#include "GameData.h"
+
 struct VelocityComponent : public Component
 {
    Float2 velocity;
@@ -21,7 +23,16 @@ struct TargetComponent : public Component
 
 struct AttackComponent : public Component
 {
+   Entity *owner;
+   Direction dir;
+   bool stunUser, damageOnContact;
+   AttackComponent(Entity *owner, Direction dir):owner(owner), dir(dir), stunUser(true), damageOnContact(true){}
+};
 
+struct TimedLifeComponent : public Component
+{
+   double seconds;
+   TimedLifeComponent(double seconds):seconds(seconds){}
 };
 
 struct PlayerControlledComponent : public Component{};

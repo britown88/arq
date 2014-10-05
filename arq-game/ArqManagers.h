@@ -15,3 +15,9 @@ std::unique_ptr<InputManager> buildInputManager(CoreUI::WorldUIElement *element)
 
 class CollisionManager : public IManager{public:virtual void update()=0;};
 std::unique_ptr<CollisionManager> buildCollisionManager();
+
+class AttackManager : public IManager{public:virtual void update()=0;};
+std::unique_ptr<AttackManager> buildAttackManager();
+
+class TimedLifeManager : public IManager{public:virtual void update()=0;};
+std::unique_ptr<TimedLifeManager> buildTimedLifeManager();
