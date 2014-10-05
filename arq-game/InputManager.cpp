@@ -13,10 +13,10 @@ REGISTER_COMPONENT(PlayerControlledComponent);
 
 class InputManagerImpl : public Manager<InputManagerImpl, InputManager>
 {
-   UIElement *m_element;
+   CoreUI::WorldUIElement  *m_element;
    Application &app;
 public:
-   InputManagerImpl(UIElement *element):m_element(element), app(*IOC.resolve<Application>())
+   InputManagerImpl(CoreUI::WorldUIElement *element):m_element(element), app(*IOC.resolve<Application>())
    {
       registerKeyboard();
    }
@@ -40,14 +40,14 @@ public:
       //auto APress = [=](KeyEvent ce){onAPress(0);};
       //auto ARelease = [=](KeyEvent ce){onARelease(0);};
 
-      m_element->registerKeyboardKey(Input::KeyLeft, Input::Press, 0, leftPress);
-      m_element->registerKeyboardKey(Input::KeyLeft, Input::Release, 0, leftRelease);
-      m_element->registerKeyboardKey(Input::KeyRight, Input::Press, 0, rightPress);
-      m_element->registerKeyboardKey(Input::KeyRight, Input::Release, 0, rightRelease);
-      m_element->registerKeyboardKey(Input::KeyDown, Input::Press, 0, downPress);
-      m_element->registerKeyboardKey(Input::KeyDown, Input::Release, 0, downRelease);
-      m_element->registerKeyboardKey(Input::KeyUp, Input::Press, 0, upPress);
-      m_element->registerKeyboardKey(Input::KeyUp, Input::Release, 0, upRelease);
+      m_element->registerKeyboardKey(Input::KeyA, Input::Press, 0, leftPress);
+      m_element->registerKeyboardKey(Input::KeyA, Input::Release, 0, leftRelease);
+      m_element->registerKeyboardKey(Input::KeyD, Input::Press, 0, rightPress);
+      m_element->registerKeyboardKey(Input::KeyD, Input::Release, 0, rightRelease);
+      m_element->registerKeyboardKey(Input::KeyS, Input::Press, 0, downPress);
+      m_element->registerKeyboardKey(Input::KeyS, Input::Release, 0, downRelease);
+      m_element->registerKeyboardKey(Input::KeyW, Input::Press, 0, upPress);
+      m_element->registerKeyboardKey(Input::KeyW, Input::Release, 0, upRelease);
       //m_element->registerKeyboardKey(Input::KeySpace, Input::Press, 0, APress);
       //m_element->registerKeyboardKey(Input::KeySpace, Input::Release, 0, ARelease);
 
@@ -55,16 +55,16 @@ public:
 
    void unregisterKeyboard()
    {
-      m_element->unregisterKeyboardKey(Input::KeyLeft, Input::Press, 0);
-      m_element->unregisterKeyboardKey(Input::KeyLeft, Input::Release, 0);
-      m_element->unregisterKeyboardKey(Input::KeyRight, Input::Press, 0);
-      m_element->unregisterKeyboardKey(Input::KeyRight, Input::Release, 0);
+      m_element->unregisterKeyboardKey(Input::KeyA, Input::Press, 0);
+      m_element->unregisterKeyboardKey(Input::KeyA, Input::Release, 0);
+      m_element->unregisterKeyboardKey(Input::KeyD, Input::Press, 0);
+      m_element->unregisterKeyboardKey(Input::KeyD, Input::Release, 0);
       //m_element->unregisterKeyboardKey(Input::KeySpace, Input::Press, 0);
       //m_element->unregisterKeyboardKey(Input::KeySpace, Input::Release, 0);
-      m_element->unregisterKeyboardKey(Input::KeyUp, Input::Press, 0);
-      m_element->unregisterKeyboardKey(Input::KeyUp, Input::Release, 0);
-      m_element->unregisterKeyboardKey(Input::KeyDown, Input::Press, 0);
-      m_element->unregisterKeyboardKey(Input::KeyDown, Input::Release, 0);
+      m_element->unregisterKeyboardKey(Input::KeyW, Input::Press, 0);
+      m_element->unregisterKeyboardKey(Input::KeyW, Input::Release, 0);
+      m_element->unregisterKeyboardKey(Input::KeyS, Input::Press, 0);
+      m_element->unregisterKeyboardKey(Input::KeyS, Input::Release, 0);
    }
 
    void sendInput(std::function<void(Entity*)> func)
@@ -88,7 +88,7 @@ public:
 
 };
 
-std::unique_ptr<InputManager> buildInputManager(UIElement *element)
+std::unique_ptr<InputManager> buildInputManager(CoreUI::WorldUIElement *element)
 {
    return std::unique_ptr<InputManager>(new InputManagerImpl(element));
 }

@@ -169,9 +169,12 @@ public:
 
    void updateGridCollisions()
    {
-      for (auto comp : m_system->getComponentVector<VelocityComponent>())
+      for (auto comp : m_system->getComponentVector<ActorComponent>())         
       {
-         Float2 v = comp.velocity;
+         Float2 v;
+
+         if(auto vc = comp.parent->get<VelocityComponent>())
+            v = vc->velocity;
 
          bool moveLeft = v.x < 0,
          moveRight = v.x > 0,

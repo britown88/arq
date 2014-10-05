@@ -41,6 +41,9 @@ public:
    virtual void stopRight(){}
    virtual void stopUp(){}
    virtual void stopDown(){}
+
+   virtual void executeAction(Entity *e, ActionType type, Float2 target){}
+   virtual void endAction(Entity *e, ActionType type, Float2 target){}
 };
 typedef StateMachine<ActorState> CharSM;
 
@@ -67,7 +70,7 @@ struct TActorComponent : public Component
 
 REGISTER_COMPONENT(TActorComponent);
 
-const static float MoveSpeed = 3.0f;
+const static float MoveSpeed = 1.25f;
 
 #pragma region Actor functions
 
@@ -248,6 +251,9 @@ public:
    void stopRight(Entity *e){characterStateFunction(e, [=](CharSM& sm){sm->stopRight();});}
    void stopUp(Entity *e){characterStateFunction(e, [=](CharSM& sm){sm->stopUp();});}
    void stopDown(Entity *e){characterStateFunction(e, [=](CharSM& sm){sm->stopDown();});}
+
+   void executeAction(Entity *e, ActionType type, Float2 target){characterStateFunction(e, [=](CharSM& sm){sm->executeAction(e, type, target);});}
+   void endAction(Entity *e, ActionType type, Float2 target){characterStateFunction(e, [=](CharSM& sm){sm->endAction(e, type, target);});}
 };
 
 std::unique_ptr<ActorManager> buildActorManager()

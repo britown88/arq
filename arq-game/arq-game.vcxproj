@@ -78,6 +78,7 @@
     <ClInclude Include="GameData.h" />
     <ClInclude Include="GridEditor.h" />
     <ClInclude Include="GridManager.h" />
+    <ClInclude Include="Actions.h" />
     <ClInclude Include="InputManager.h" />
     <ClInclude Include="PartitionManager.h" />
     <ClInclude Include="CollisionManager.h" />
@@ -87,6 +88,7 @@
     <ClInclude Include="ArqGame.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Actions.cpp" />
     <ClCompile Include="ActorManager.cpp" />
     <ClCompile Include="CameraManager.cpp" />
     <ClCompile Include="GameData.cpp" />

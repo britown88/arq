@@ -59,7 +59,7 @@ public:
       auto elem = m_arqGame->getOuterElement();      
       elem->setOptionAnchors(0.0f, 0.0f, logcatwidth, 0.0f);
       
-      giveFocus(m_arqGame->getDlgElement());
+      //giveFocus(m_arqGame->getDlgElement());
 
       m_logBadger = createLogBadger();
       m_logBadger->open(&getUIRoot());

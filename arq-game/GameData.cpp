@@ -2,5 +2,5 @@
 
 namespace GameData
 {
-   const int PlayerCount = 4;
+
 };

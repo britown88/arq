@@ -77,13 +77,13 @@ class ArqGame : public Tool
       for(int i = 0; i <= 5; ++i) buildBlock(Recti(15+i, 18, 16+i, 19));
 
       
-      float size = 50.0f;
+      float size = 25.0f;
       auto e = m_system.createEntity();
-      e->add(PositionComponent(Float2(1000, 500)));
+      e->add(PositionComponent(Float2(500, 250)));
       e->add(GraphicalBoundsComponent(Float2(size, size)));
       e->add(CenterComponent(Float2(size/2.0f, size/2.0f)));
       //e->add(CollisionBoxComponent(0, 0, size, size));
-      e->add(CollisionBoxComponent(12, 14, 26, 31));
+      e->add(CollisionBoxComponent(6, 7, 13, 15));
       e->add(MeshComponent(ibo, vbo, Colorf(1, 1, 1)));
       e->add(RotationComponent(0.0f, Float2(size/2.0f, size/2.0f)));
       e->add(TextureComponent());
@@ -109,7 +109,7 @@ class ArqGame : public Tool
 
    void buildTotallySweetCamera()
    {
-      Float2 size(512.0f, 288.0f);
+      Float2 size(256.0f, 144.0f);
       auto e = m_system.createEntity();
       e->add(CameraComponent());
       e->add(GraphicalBoundsComponent(size));
@@ -127,12 +127,12 @@ class ArqGame : public Tool
       //bg
       auto bg = m_system.createEntity();
       bg->add(PositionComponent(Float2()));
-      bg->add(GraphicalBoundsComponent(Float2(1600, 1600)));
+      bg->add(GraphicalBoundsComponent(Float2(800, 800)));
       bg->add(MeshComponent(ibo, vbo, Colorf(1, 1, 1)));
       bg->add(LayerComponent(-1));
-      TextureComponent bgTex(st->get("assets/img/sand.png"));
+      TextureComponent bgTex(st->get("assets/img/zeldasand.png"));
       bgTex.repeatType = RepeatType::Repeat;
-      bgTex.size = Float2(150, 150);
+      bgTex.size = Float2(16, 16);
       bg->add(bgTex);
       bg->setNew();
    }
@@ -144,7 +144,7 @@ class ArqGame : public Tool
       m_system.addManager(buildCollisionPartitionManager());
       m_system.addManager(buildMatrixManager());
       m_system.addManager(buildPhysicsManager());
-      m_system.addManager(buildInputManager(getDlgElement()));
+      
       m_system.addManager(buildActorManager());
       m_system.addManager(buildGridManager());
    }
@@ -196,7 +196,7 @@ public:
       initManagers();   
       initDataManager();
 
-      m_system.getManager<GridManager>()->createGrid(Float2(), Int2(50, 50), Float2(32.0f, 32.0f));
+      m_system.getManager<GridManager>()->createGrid(Float2(), Int2(50, 50), Float2(16.0f, 16.0f));
 
       buildBackground();
       buildTestEntities();
@@ -206,7 +206,10 @@ public:
       m_worldElement->cameraBounds() = Rectf(0, 0, 455, 256);
       m_worldElement->anchorToParent();
 
+      m_system.addManager(buildInputManager(m_worldElement));
       m_system.addManager(buildCameraManager(m_worldElement));
+
+      app.giveFocus(m_worldElement);
 
       getDlgElement()->intern(createGridEditor(m_worldElement, &m_system));
 

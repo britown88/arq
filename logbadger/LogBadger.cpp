@@ -26,7 +26,7 @@ public:
    {
       auto height = 20;
 
-      auto font = std::make_shared<TextFont>("assets/fonts/comic.ttf", 12.0f);
+      auto font = std::make_shared<TextFont>("assets/fonts/retganon.ttf", 12.0f);
 
       for(int i = 0; i < LineCount; ++i)
       {

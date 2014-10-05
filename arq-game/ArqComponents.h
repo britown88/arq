@@ -30,14 +30,10 @@ struct ActorComponent : public Component
                   leftRunSprite,
                   rightRunSprite;
 
-   ActorComponent(): upIdleSprite(nullptr),  
-                     downIdleSprite(nullptr),  
-                     leftIdleSprite(nullptr),  
-                     rightIdleSprite(nullptr),  
-                     upRunSprite(nullptr),
-                     downRunSprite(nullptr),
-                     leftRunSprite(nullptr),
-                     rightRunSprite(nullptr){}
+   InternString   mainHandAction,
+                  offHandAction;
+
+   ActorComponent(){memset(this, 0, sizeof(*this));}
 };
 
 
